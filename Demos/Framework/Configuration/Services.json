@@ -1,0 +1,21 @@
+﻿{
+  "StreamConfig": {
+    "BufferSize": 16384,
+    "BufferLength": 4096,
+    "PacketOffset": 128
+  },
+  "Services": [
+    {
+      "Enable": true,
+      "ServiceType": "Server",
+      "ServiceID": "Test",
+      "IP": "127.0.0.1",
+      "Port": 5000,
+      "OpenKeepAlive": false,
+      "KeepAliveInterval": 3000,
+      "ReconnectMaxCount": 3,
+      "OpenFragmentResend": false,
+      "FragmentInterval": 2000
+    }
+  ]
+}

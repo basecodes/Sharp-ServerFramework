@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Src\Ssc\Ssc.csproj" />
+    <ProjectReference Include="..\..\Src\Ssm\Ssm.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Configuration\Encryptor.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\Logger.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\Modules.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\Services.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(SolutionDir)Demos/Framework/$(OutDir)Framework.*&quot; &quot;$(TargetDir)&quot;   /s /e /y&#xD;&#xA;xcopy &quot;$(SolutionDir)Demos/Framework/$(OutDir)*.dll&quot; &quot;$(TargetDir)&quot;   /s /e /y&#xD;&#xA;xcopy &quot;$(SolutionDir)Demos/Framework/$(OutDir)*.pdb&quot; &quot;$(TargetDir)&quot;   /s /e /y" />
+  </Target>
+
+</Project>

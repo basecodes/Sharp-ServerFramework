@@ -1,0 +1,10 @@
+﻿{
+  "Paths": [
+    {
+      "Language": "Lua",
+      "File": "Start.lua",
+      "Entry": "",
+      "Search": "./Lib/?.lua;./Controllers/?.lua;./Modules/?.lua;./Lua/?.lua;./Packets/?.lua"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+﻿{
+  "FilterLogLevel": 0,
+  "ForceLogLevel": 0,
+  "GlobalLogLevel": 0,
+  "LogSwitch": 1,
+  "LogType": "Global",
+  "OutputType": 2,
+  "FileName": "./Logs/Log.txt",
+  "WriteInterval": 3
+}

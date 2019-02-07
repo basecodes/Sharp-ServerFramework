@@ -1,0 +1,10 @@
+﻿{
+  "Paths": [
+    {
+      "Language":"CSharp",
+      "File": "CSharpModule.dll",
+      "Entry": "CSharpModule.Startup",
+      "Search": ""
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+﻿{
+  "Switch": true,
+  "CryptonKeyLength": 8,
+  "Salt": "DgA1eDY4NSQlKCpfQCMkJQ==",
+  "RsaKeySize": 512,
+  "SALT_BYTE_SIZE": 24,
+  "HASH_BYTE_SIZE": 24,
+  "PBKDF2_ITERATIONS": 1000,
+  "ITERATION_INDEX": 0,
+  "SALT_INDEX": 1,
+  "PBKDF2_INDEX": 2
+}

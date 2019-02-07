@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "PythonModule": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "commandLineArgs": "Framework.dll"
+    }
+  }
+}

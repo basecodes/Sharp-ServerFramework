@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <AssemblyName>Ssm</AssemblyName>
+    <RootNamespace>Ssm</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="SsmModule\" />
+    <Folder Include="SsmService\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ssc\Ssc.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)Ssm.dll&quot; &quot;$(SolutionDir)dll/$(ConfigurationName)/Ssf&quot;  /s /e /y&#xD;&#xA;xcopy &quot;$(TargetDir)Ssm.pdb&quot; &quot;$(SolutionDir)dll/$(ConfigurationName)/Ssf&quot;  /s /e /y" />
+  </Target>
+
+</Project>

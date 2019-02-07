@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <LangVersion>7.3</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="IronPython" Version="2.7.9" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.10.0" />
+      <PackageReference Include="MoonSharp" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ssc\Ssc.csproj" />
+      <ProjectReference Include="..\Ssm\Ssm.csproj" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="xcopy &quot;$(TargetDir)Sss.dll&quot; &quot;$(SolutionDir)dll/$(ConfigurationName)/Ssf&quot;  /s /e /y&#xD;&#xA;xcopy &quot;$(TargetDir)Sss.pdb&quot; &quot;$(SolutionDir)dll/$(ConfigurationName)/Ssf&quot;  /s /e /y" />
+    </Target>
+
+</Project>
