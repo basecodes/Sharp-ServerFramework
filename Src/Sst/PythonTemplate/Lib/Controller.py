@@ -1,17 +1,21 @@
 ﻿import clr
-clr.AddReference("Ssm")
+import sys
+clr.AddReference("Ssc")
+clr.AddReference("Sss")
 
-from Ssm.Ssm import Controller as PythonController
+from Ssc.Ssc import Controller as PythonController
+from Sss.SssScripts.Pythons import PythonProxy
 
 class Controller(PythonController):
 	def __init__(self):
-		self.__dict = dict()
-		
-	def Members(self):
-		return self.__dict;
+		self.MethodIds = ""
 
-	def __setitem__(self, key,value):
-		self.__dict[key] = value
-		
-	def __getitem__(self, key):
-		return self.__dict[key]
+	def Register(self, key,value):
+		id = PythonProxy.Register(key,value,sys.PythonHelper)
+		if self.MethodIds == "":
+			self.MethodIds = id
+		else:
+			self.MethodIds = self.MethodIds + ";" + id
+
+	def Invoke(self,id,peer,callback,*args):
+		PythonProxy.Invoke(id,peer,callback,args)

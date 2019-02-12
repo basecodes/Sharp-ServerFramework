@@ -1,11 +1,13 @@
 ﻿
 import clr
+import sys
 clr.AddReference("Sss")
 
 from Sss.SssModule import PythonModule
 
 class Module(PythonModule):
 	def __init__(self):
+		PythonModule.SetPythonHelper(self,sys.PythonHelper)
 		self.__ServiceId = ""
 
 	@property
@@ -34,11 +36,11 @@ class Module(PythonModule):
 	def Connected(self,peer,readStream):
 		PythonModule.Connected(self,peer,readStream)
 
-	def AddController(self,interface,implement):
-		return PythonModule.AddController(self,interface,implement)
+	def AddController(self,generator):
+		return PythonModule.AddController(self,generator)
 
 	def SetObjectPool(self,interface,implement):
-		PythonModulePythonModule.SetObjectPool(self,interface,implement)
+		PythonModule.SetObjectPool(self,interface,implement)
 
 	def SetPacketPool(self,interface,implement):
 		PythonModule.SetPacketPool(self,interface,implement)

@@ -34,11 +34,11 @@ namespace Sss.SssModule {
             RpcPacketTypes = new List<string>();
         }
 
-        public abstract string ServiceId { get; }
-
-        public void SetPythonHelper(PythonHelper pythonHelper) {
-            _pythonHelper = pythonHelper;
+        protected void SetPythonHelper(PythonHelper pythonHelper) {
+            _pythonHelper = pythonHelper ?? throw new ArgumentNullException(nameof(pythonHelper));
         }
+
+        public abstract string ServiceId { get; }
 
         public virtual void Initialize(IServer server, ICacheManager cacheManager,
             IControllerComponentManager controllerComponentManager) {
@@ -80,48 +80,18 @@ namespace Sss.SssModule {
         public virtual void Disconnected(IUser peer) {
         }
 
-        public IController AddController(PythonType interfaceType,dynamic implement){
-            if (interfaceType == null) {
-                throw new ArgumentNullException(nameof(interfaceType));
+        public void AddController(Func<dynamic> generator){
+            if (generator == null) {
+                throw new ArgumentNullException(nameof(generator));
             }
 
-            if (implement == null) {
-                throw new ArgumentNullException(nameof(implement));
+            var instance = generator.Invoke();
+            if (instance == null) {
+                throw new ArgumentException(nameof(generator));
             }
-
-            var interfaceName = PythonHelper.GetPythonTypeName(implement);
-            if (!interfaceType.__instancecheck__(implement)) {
-                throw new NotImplementedException(
-                    PythonHelper.GetPythonTypeName(implement) + 
-                    $"没有实现{interfaceName}接口");
-            }
-
-            var fields = implement.Members() as PythonDictionary;
-            foreach (var item in fields) {
-                var name = item.Key as string;
-                if (string.IsNullOrEmpty(name)) {
-                    continue;
-                }
-
-                var pattern = @"^[+][\[](.*)[\]][+]$";
-                var match = Regex.Match(name, pattern);
-                if (!match.Success) {
-                    continue;
-                }
-
-                var method = item.Value;
-                object LateBoundMethod(params object[] args) {
-                    return _pythonHelper.Call(method, args);
-                }
-
-                var id = match.Groups[1].Value;
-                RpcMethodIds.Add(id);
-                RpcRegister.RegisterMethod(id, LateBoundMethod);
-            }
-
-            LuaHelper.RegisterType(interfaceType);
-
-            return implement;
+            var ids = instance.MethodIds as string;
+            var splist = ids.Split(";");
+            RpcMethodIds.AddRange(splist);
         }
 
         protected void SetObjectPool(Type type, dynamic implement){

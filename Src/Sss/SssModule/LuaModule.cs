@@ -105,9 +105,9 @@ namespace Sss.SssModule {
             var dynValue = table.Table.Get(nameof(IController));
             var rpcObject = dynValue.ToObject<IController>();
  
-            var keys = table.Table.Get("+[ids]+");
+            var keys = table.Table.Get("MethodIds");
             if (keys == DynValue.Nil) {
-                throw new Exception($"无+[ids]+！");
+                throw new Exception($"无MethodIds！");
             }
 
             var ids = keys.ToObject<string>();

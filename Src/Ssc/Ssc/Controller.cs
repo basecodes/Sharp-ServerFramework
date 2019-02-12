@@ -39,7 +39,9 @@ namespace Ssc.Ssc {
             MethodIds.Add(method.Id);
         }
 
-        public void Register(string methodId, Expression<Action> implementExpression) {
+        public void Register(
+            string methodId, 
+            Expression<Action> implementExpression) {
             var method = Ssci.Register(methodId, implementExpression);
             MethodIds.Add(method.Id);
         }

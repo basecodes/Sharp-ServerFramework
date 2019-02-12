@@ -22,6 +22,11 @@ namespace Sss.SssScripts.Pythons {
             _scriptScope.SetVariable(name, value);
         }
 
+        public void SetSysVariable<T>(string name,T value) {
+            var sys = _scriptEngine.GetSysModule();
+            sys.SetVariable(name, value);
+        }
+
         public void SetGlobalVariable<T>(string name,T value) {
             _scriptEngine.Runtime.Globals.SetVariable(name, value);
         }
@@ -34,7 +39,7 @@ namespace Sss.SssScripts.Pythons {
             _scriptEngine.Runtime.LoadAssembly(assembly);
         }
 
-        public void SetSetSearchPaths(params string[] paths) {
+        public void SetSearchPaths(params string[] paths) {
             _scriptEngine.SetSearchPaths(paths);
         }
 

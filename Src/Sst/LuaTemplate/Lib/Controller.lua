@@ -9,10 +9,10 @@ end
 function Controller:Register(key,func)
 	local id = LuaProxy:Register(self,key,func)
 
-	if self["+[ids]+"] == nil then
-		self["+[ids]+"] = id
+	if self.MethodIds == nil then
+		self.MethodIds = id
 	else
-		self["+[ids]+"] = self["+[ids]+"] .. ";" .. id
+		self.MethodIds = self.MethodIds .. ";" .. id
 	end
 end
 

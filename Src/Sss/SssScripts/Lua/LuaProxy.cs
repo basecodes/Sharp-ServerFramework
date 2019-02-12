@@ -8,8 +8,6 @@ using Ssc.Ssc;
 using Ssc.SscFactory;
 using Ssc.SscLog;
 using Ssc.SscRpc;
-using Ssc.SscSerialization;
-using Ssc.SscStream;
 using Ssc.SscTemplate;
 using Ssm.Ssm;
 using Sss.SssComponent;
@@ -67,7 +65,7 @@ namespace Sss.SssScripts.Lua {
             var pattern = @"^[+][\[](.*)[\]][+]$";
             var match = Regex.Match(id, pattern);
             if (!match.Success) {
-                throw new ArgumentNullException(nameof(id));
+                throw new ArgumentException(nameof(id));
             }
 
             object LateBoundMethod(params object[] args) {
@@ -139,6 +137,14 @@ namespace Sss.SssScripts.Lua {
         }
 
         public static void Invoke(string methodId,IPeer peer,Closure closure, params object[] objects) {
+            if (string.IsNullOrEmpty(methodId)) {
+                throw new ArgumentException(nameof(methodId));
+            }
+
+            if (peer == null) {
+                throw new ArgumentNullException(nameof(peer));
+            }
+
             ResponseCallback responseCallback = (rm, sd) => {
                 closure?.Call(rm, sd);
             };

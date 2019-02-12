@@ -56,7 +56,9 @@ namespace Ssf.SsfManager {
 
         public void AddModuleFromPythonFile(string fileName, string entry = "Startup", params string[] paths) {
             var pythonHelper = new PythonHelper();
-            pythonHelper.SetSetSearchPaths(paths);
+
+            pythonHelper.SetSearchPaths(paths);
+            pythonHelper.SetSysVariable("PythonHelper", pythonHelper);
             var module = pythonHelper.Execute(fileName, entry);
 
             if (module == null) {
@@ -69,8 +71,6 @@ namespace Ssf.SsfManager {
 
             var type = PythonHelper.GetPythonTypeName(module);
 
-            module.SetPythonHelper(pythonHelper);
-
             AddModule(type, module);
         }
 
@@ -82,13 +82,12 @@ namespace Ssf.SsfManager {
             luaHelper.SetSearchPath(libPath);
             luaHelper.RegisterGlobal(nameof(LuaHelper), luaHelper);
 
-            Table module = null;
             var table = luaHelper.Execute(fileName)?.Table;
             if (table == null) {
                 return;
             }
 
-            module = luaHelper.Call(table, nameof(Entry.Main)).Table;
+            var module = luaHelper.Call(table, nameof(Entry.Main)).Table;
             if (module == null) {
                 throw new Exception($"{nameof(module)}为空！");
             }

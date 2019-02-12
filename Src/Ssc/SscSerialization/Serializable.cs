@@ -298,6 +298,8 @@ namespace Ssc.SscSerialization {
                     return;
                 }
             }
+
+            throw new NotSupportedException($"{obj.GetType().Name}类型不支持！");
         }
 
     }
