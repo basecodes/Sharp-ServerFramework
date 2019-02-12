@@ -7,5 +7,4 @@ class Startup(Entry):
 		pass
 
     def Main(self):
-		print("xxxxxxxxxxxxxxxxx")
 		return TestModule()

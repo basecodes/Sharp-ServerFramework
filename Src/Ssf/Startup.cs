@@ -144,7 +144,7 @@ namespace Ssf {
 
             }
 
-            InteractiveManager.Show(Show);
+            //InteractiveManager.Show(Show);
             InteractiveManager.RunInteractive(this, args);
         }
 
