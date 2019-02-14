@@ -49,7 +49,8 @@ namespace Ssc.SscRpc {
         }
 
         public static MethodTuple CreateMethodTuple<T>(Func<Expression<T>> func) {
-            var name = func.Method.Name;
+            var method = func?.Invoke().Body as MethodCallExpression;
+            var name = method.Method.ToString();
             var methodTupe = Get(name);
             if (methodTupe == null) {
                 methodTupe = CreateMethodTuple(func?.Invoke());
@@ -185,6 +186,16 @@ namespace Ssc.SscRpc {
 
         public static MethodTuple Get(string name) {
             _dict.TryGetValue(name, out var result);
+            return result;
+        }
+
+        public static MethodTuple Get<T>(Func<Expression<T>> func) {
+            var method = func?.Invoke().Body as MethodCallExpression;
+            var name = method.Method.ToString();
+            if (!_dict.TryGetValue(name, out var result)) {
+                result = CreateMethodTuple(func?.Invoke());
+                Add(name, result);
+            }
             return result;
         }
 

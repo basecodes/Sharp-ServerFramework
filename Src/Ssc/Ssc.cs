@@ -39,13 +39,8 @@ namespace Ssc {
         }
 
         private static void Invoke<T>(Func<Expression<T>> func, IPeer peer, ResponseCallback responseCallback) {
-
-            var name = func.Method.Name;
-            var methodTuple = RpcRequestManager.Get(name);
-            if (methodTuple == null) {
-                methodTuple = RpcRequestManager.CreateMethodTuple(func);
-            }
-
+            
+            var methodTuple = RpcRequestManager.Get(func);
             var method = func?.Invoke().Body as MethodCallExpression;
             var array = new object[method.Arguments.Count];
 

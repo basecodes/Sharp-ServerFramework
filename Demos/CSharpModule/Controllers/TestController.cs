@@ -3,6 +3,7 @@ using Ssc;
 using Ssc.Ssc;
 using Ssc.SscLog;
 using System;
+using System.Linq;
 
 namespace CSharpModule.Controllers {
 
@@ -38,7 +39,9 @@ namespace CSharpModule.Controllers {
         }
 
         public bool Test(int num, string str, int[] array, IPeer peer, Action<Action> callback) {
-            Test(num, str, peer, callback);
+            Logger.Info(num);
+            Logger.Info(str); Logger.Info(num);
+            Logger.Info(str);
 
             foreach (var item in array) {
                 Logger.Info(item);
@@ -47,12 +50,21 @@ namespace CSharpModule.Controllers {
         }
 
         public bool Test(int num, string str, int[] array, ITestPacket[] testPackets, IPeer peer, Action<Action> callback) {
-            Test(num, str, array, peer, callback);
+            Logger.Info(num);
+            Logger.Info(str); Logger.Info(num);
+            Logger.Info(str);
+
+            foreach (var item in array) {
+                Logger.Info(item);
+            }
 
             foreach (var item in testPackets) {
                 Logger.Info(item);
             }
 
+            var value = num + " " + str;
+            var packet = testPackets.First();
+            Ssci.Invoke<ITestRequest>(() => (req) => req.TestRequest(value,packet), peer);
             return true;
         }
     }

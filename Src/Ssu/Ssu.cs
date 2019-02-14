@@ -53,7 +53,7 @@ namespace Ssu {
 
         public static void RegisterPacket<Interface, Implement>()
             where Interface : class 
-            where Implement : SerializablePacket, Interface {
+            where Implement : ISerializablePacket, Interface {
             
             PacketManager.Register<Interface>(
                 args => ObjectFactory.GetActivator<ISerializablePacket>(typeof(Implement).GetConstructors().First())());
