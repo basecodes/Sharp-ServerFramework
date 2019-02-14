@@ -33,3 +33,6 @@ Src/Ssu_Editor/obj/
 Tests/Test/bin/
 Tests/Test/obj/
 /.vs
+/Demos/Unity/.vs
+/Demos/Unity/Library
+/Demos/Unity/ProjectSettings

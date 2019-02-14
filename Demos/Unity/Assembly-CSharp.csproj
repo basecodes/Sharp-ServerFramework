@@ -61,21 +61,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ITest.cs" />
+    <Compile Include="Assets\Scripts\ITestPacket.cs" />
+    <Compile Include="Assets\Scripts\ITestRequest.cs" />
+    <Compile Include="Assets\Scripts\ITestResponse.cs" />
     <Compile Include="Assets\Scripts\Request.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -279,28 +282,28 @@
       <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ssc">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Assets/Plugins/Ssc.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Assets/Plugins/Ssc.dll</HintPath>
     </Reference>
     <Reference Include="Ssu">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Assets/Plugins/Ssu.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Assets/Plugins/Ssu.dll</HintPath>
     </Reference>
     <Reference Include="System.Buffers">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Assets/Plugins/System.Buffers.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Assets/Plugins/System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="Xml.Net">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Assets/Plugins/Xml.Net.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Assets/Plugins/Xml.Net.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>E:/项目/Ssf/Demos/Unity/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>E:/Sharp-ServerFramework/Demos/Unity/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
