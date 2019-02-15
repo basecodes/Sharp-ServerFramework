@@ -33,6 +33,7 @@ namespace Sss.SssScripts.Lua {
             ScriptToClr.RegisterTableToDictionary<ISerializablePacket, ISerializablePacket>();
             ScriptToClr.RegisterTableToDictionary<ISerializablePacket, IConvertible>();
             ScriptToClr.RegisterTableToPeerComponent();
+            ScriptToClr.RegisterTableToObject();
             ScriptToClr.RegisterTableToRpcComponent();
             ScriptToClr.RegisterFunctionToResponseCallback();
             ScriptToClr.RegisterFunctionToAction();

@@ -14,27 +14,34 @@ end
 function TestController:Test1(num,str,peer,callback)
     print(num)
 	print(str)
+
 	self:Invoke("User-9CEF8CD0-8720-4C34-9341-545AF7693AB2",peer,nil,num .. str)
 	return true
 end
 
 function TestController:Test2(num,str,array,peer,callback)
-    self:Test1(num,str,peer,callback)
+    print(num)
+	print(str)
+
+	for i = 1,#array do
+		print(array[i])
+	end
+	return true
+end
+
+function TestController:Test3(num,str,array,packets,peer,callback)
+    print(num)
+	print(str)
 
 	for i = 1,#array do
 		print(array[i])
 	end
 
-	return true
-end
-
-function TestController:Test3(num,str,array,packets,peer,callback)
-    self:Test2(num,str,array,peer,callback)
-
 	for i = 1,#packets do
 		print(packets[i]:ToString())
 	end
 
+	self:Invoke("User-4AC85EE0-2616-4EB3-AD50-DA7FB588870C",peer,nil,num .. str,packets[1])
 	return true
 end
 

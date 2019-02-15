@@ -4,20 +4,21 @@ using Ssc.SscSerialization;
 using Ssc.SscStream;
 
 namespace Ssf.SsfNetwork.Messages {
-    public struct RawMessage :ISerializablePacket{
+    public class RawMessage :SerializablePacket{
 
         private static readonly Logger Logger = LogManager.GetLogger<RawMessage>(LogType.Middle);
 
+        public override string TypeName => typeof(RawMessage).Name;
         public ushort OpCode { get; set; }
         public string Exception { get; set; }
 
         public IDeserializable Deserializable { get; private set; }
-        public void ToBinaryWriter(IEndianBinaryWriter writer) {
+        public override void ToBinaryWriter(IEndianBinaryWriter writer) {
             writer.Write(Exception);
             writer.Write(OpCode);
         }
 
-        public void FromBinaryReader(IEndianBinaryReader reader) {
+        public override void FromBinaryReader(IEndianBinaryReader reader) {
             OpCode = reader.Read<ushort>();
             Exception = reader.Read<string>();
 //             if (string.IsNullOrEmpty(Exception))

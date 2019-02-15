@@ -1,4 +1,5 @@
 ﻿{
+  "ProjectName": "LuaModule",
   "Paths": [
     {
       "Language": "Lua",

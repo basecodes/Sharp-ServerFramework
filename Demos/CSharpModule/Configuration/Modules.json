@@ -1,7 +1,8 @@
 ﻿{
+  "ProjectName": "CSharpModule",
   "Paths": [
     {
-      "Language":"CSharp",
+      "Language": "CSharp",
       "File": "CSharpModule.dll",
       "Entry": "CSharpModule.Startup",
       "Search": ""

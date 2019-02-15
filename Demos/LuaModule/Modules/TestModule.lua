@@ -7,11 +7,14 @@ local TestPacket = require "TestPacket"
 local TestModule = Classes.class(Module)
 
 function TestModule:init()
-	self.super:init(self,"Test") -- ServiceId = "Test"
+	self.super:init(self)
+
+	self.ModuleName = "TestModule"
+	self.ServiceId = "Test"
 end
 
-function TestModule:Initialize(server,cacheManager,rpcComponentManager)
-	self.super:Initialize(server,cacheManager,rpcComponentManager)
+function TestModule:Initialize(server,cacheManager,controllerComponentManager)
+	self.super:Initialize(server,cacheManager,controllerComponentManager)
 
     self:AddController(function() 
 		return TestController.new()
@@ -22,15 +25,15 @@ function TestModule:Initialize(server,cacheManager,rpcComponentManager)
 	end)
 end
 
-function TestModule:Finish(server,cacheManager,rpcComponentManager )
-	self.super:Finish(server,cacheManager,rpcComponentManager)
+function TestModule:Finish(server,cacheManager,controllerComponentManager )
+	self.super:Finish(server,cacheManager,controllerComponentManager)
 end
 
-function TestModule:Connected( peer ,readStream)
+function TestModule:Connected(peer,readStream)
 	self.super:Connected(peer,readStream)
 end
 
-function TestModule:Disconnected( peer )
+function TestModule:Disconnected(peer)
 	self.super:Disconnected(peer)
 end
 

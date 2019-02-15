@@ -25,7 +25,7 @@ namespace Sss.SssScripts.Lua {
                 throw new ArgumentNullException(nameof(interfaceName));
             }
 
-            return LuaSerializablePacket<ILuaPacket>.GetObject(interfaceName).Instance;
+            return LuaPoolAllocator<ILuaPacket>.GetObject(interfaceName).Instance;
         }
 
         public static void Recycle(string interfaceName,ILuaPacket luaPacket) {
@@ -37,7 +37,7 @@ namespace Sss.SssScripts.Lua {
                 throw new ArgumentNullException(nameof(interfaceName));
             }
 
-            LuaSerializablePacket<ILuaPacket>.Recycle(interfaceName, luaPacket);
+            LuaPoolAllocator<ILuaPacket>.Recycle(interfaceName, luaPacket);
         }
         
         public static LuaWrapper<ILuaPacket> New(string interfaceName, Table table, LuaHelper luaHelper) {
@@ -110,13 +110,9 @@ namespace Sss.SssScripts.Lua {
             return new LuaWrapper<LuaControllerComponent>(luaRpcComponent);
         }
 
-        public static LuaModule New(Table instance, string id, LuaHelper luaHelper) {
+        public static LuaModule New(Table instance, LuaHelper luaHelper) {
             if (instance == null) {
                 throw new ArgumentNullException(nameof(instance));
-            }
-            
-            if (string.IsNullOrEmpty(id)) {
-                throw new ArgumentException(nameof(id));
             }
 
             if (luaHelper == null) {
@@ -124,7 +120,7 @@ namespace Sss.SssScripts.Lua {
             }
 
             return ObjectFactory.GetActivator<LuaModule>(
-                typeof(LuaModule).GetConstructors().First())(instance, id, luaHelper);
+                typeof(LuaModule).GetConstructors().First())(instance, luaHelper);
         }
 
         public static LuaController New(Table instance) {
@@ -148,6 +144,7 @@ namespace Sss.SssScripts.Lua {
             ResponseCallback responseCallback = (rm, sd) => {
                 closure?.Call(rm, sd);
             };
+
             Ssci.Invoke(methodId, peer, responseCallback, objects);
         }
 

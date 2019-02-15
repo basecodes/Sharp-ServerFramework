@@ -3,7 +3,7 @@ using Ssc.SscSerialization;
 using Ssc.SscTemplate;
 
 namespace CSharpModule.Packets {
-    public class TestPacket : PoolAllocator<ITestPacket>, ITestPacket {
+    public class TestPacket : SerializablePacket<ITestPacket>, ITestPacket {
         public string Name { get; set; }
         public string Password { get; set; }
 

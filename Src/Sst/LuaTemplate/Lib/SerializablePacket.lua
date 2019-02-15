@@ -18,6 +18,9 @@ function SerializablePacket:init(child,interface)
   self.float = TypeCode.Single
   self.double = TypeCode.Double
   self.string = TypeCode.String
+
+  self.Type = FieldType.PacketType
+  self.Interface = interface
 end
 
 function SerializablePacket:GetObject(interface)

@@ -21,6 +21,8 @@ namespace Ssm.SsmModule {
         public List<string> RpcMethodIds { get; }
         public List<string> RpcPacketTypes { get; }
 
+        public string ModuleName => GetType().Name;
+
         private ICacheManager _cacheManager;
         private IControllerComponentManager _controllerComponentManager;
 

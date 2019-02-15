@@ -23,7 +23,58 @@ namespace Sss.SssScripts.Lua {
                 }
             );
         }
-        
+
+        public static void RegisterTableToObject() {
+            Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
+                DataType.Table, typeof(object),
+                v => {
+                    var table = v.Table;
+                    var type = table.Get("Type")?.ToObject<FieldType>();
+                    switch (type) {
+                        case FieldType.NullType:
+                            return null;
+                        case FieldType.PacketType: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(ISerializablePacket));
+                                return conversion?.Invoke(v);
+                            }
+                        case FieldType.ArrayBase: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(IConvertible[]));
+                                return conversion?.Invoke(v);
+                            }
+                        case FieldType.ArrayPacket: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(ISerializablePacket[]));
+                                return conversion?.Invoke(v);
+                            }
+                        case FieldType.DictKBVB: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(Dictionary<IConvertible, IConvertible>));
+                                return conversion?.Invoke(v);
+                            }
+                        case FieldType.DictKBVP: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(Dictionary<IConvertible, ISerializablePacket>));
+                                return conversion?.Invoke(v);
+                            }
+                        case FieldType.DictKPVP: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(Dictionary<ISerializablePacket, ISerializablePacket>));
+                                return conversion?.Invoke(v);
+                            }
+                        case FieldType.DictKPVB: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(Dictionary<ISerializablePacket, IConvertible>));
+                                return conversion?.Invoke(v);
+                            }
+                    }
+
+                    return null;
+                }
+            );
+        }
+
         public static void RegisterTableToRpcComponent(){
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Table, typeof(IControllerComponent),
@@ -33,7 +84,7 @@ namespace Sss.SssScripts.Lua {
                 }
             );
         }
-        
+
         public static void RegisterFunctionToResponseCallback() {
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Function, typeof(ResponseCallback),
@@ -68,11 +119,13 @@ namespace Sss.SssScripts.Lua {
         }
 
         public static void RegisterTableToDictionary<K, V>() {
-            if (typeof(K) != typeof(IConvertible) && typeof(K) != typeof(ISerializablePacket))
-                throw new NotSupportedException("K类型必须是(IConvertible或ISerializablePacket)");
+            if (typeof(K) != typeof(IConvertible) && typeof(K) != typeof(ISerializablePacket)){
+                throw new NotSupportedException($"{typeof(K).Name}类型必须是({nameof(IConvertible)}或{nameof(ISerializablePacket)})");
+            }
 
-            if (typeof(V) != typeof(IConvertible) && typeof(V) != typeof(ISerializablePacket))
-                throw new NotSupportedException("V类型必须是(IConvertible或ISerializablePacket)");
+            if (typeof(V) != typeof(IConvertible) && typeof(V) != typeof(ISerializablePacket)) {
+                throw new NotSupportedException($"{typeof(V).Name}类型必须是({nameof(IConvertible)}或{nameof(ISerializablePacket)})");
+            }
 
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Table, typeof(Dictionary<K, V>),
@@ -82,20 +135,27 @@ namespace Sss.SssScripts.Lua {
 
                     foreach (var item in table.Pairs) {
                         object key = null;
-                        if (typeof(K) == typeof(IConvertible))
+                        if (typeof(K) == typeof(IConvertible)) {
                             key = item.Key.ToObject<IConvertible>();
+                        }
 
-                        if (typeof(K) == typeof(ISerializablePacket))
+                        if (typeof(K) == typeof(ISerializablePacket)) {
                             key = item.Key.Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value as ISerializablePacket;
+                        }
 
                         object value = null;
-                        if (typeof(V) == typeof(IConvertible))
+                        if (typeof(V) == typeof(IConvertible)) {
                             value = item.Value.ToObject<IConvertible>();
+                        }
 
-                        if (typeof(V) == typeof(ISerializablePacket))
+                        if (typeof(V) == typeof(ISerializablePacket)) {
                             value = item.Value.Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value as ISerializablePacket;
+                        }
 
-                        if (key == null || value == null) return null;
+                        if (key == null || value == null) {
+                            return null;
+                        }
+
                         values.Add(key, value);
                     }
 
@@ -105,8 +165,10 @@ namespace Sss.SssScripts.Lua {
         }
 
         public static void RegisterTableToArray<T>() {
-            if (typeof(T) != typeof(IConvertible) && typeof(T) != typeof(ISerializablePacket))
-                throw new NotSupportedException("T类型必须是(IConvertible或ISerializablePacket)");
+            if (typeof(T) != typeof(IConvertible) && typeof(T) != typeof(ISerializablePacket)) {
+                throw new NotSupportedException($"{typeof(T).Name}类型必须是({nameof(IConvertible)}或{nameof(ISerializablePacket)})");
+            }
+
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Table, typeof(T[]),
                 v => {
@@ -114,14 +176,17 @@ namespace Sss.SssScripts.Lua {
 
                     if (typeof(T) == typeof(IConvertible)) {
                         var values = new IConvertible[table.Length];
-                        for (var i = 0; i < table.Length; i++) values[i] = table.Get(i + 1).ToObject<IConvertible>();
+                        for (var i = 0; i < table.Length; i++) {
+                            values[i] = table.Get(i + 1).ToObject<IConvertible>();
+                        }
                         return values;
                     }
 
                     if (typeof(T) == typeof(ISerializablePacket)) {
                         var values = new ISerializablePacket[table.Length];
-                        for (var i = 0; i < table.Length; i++)
-                            values[i] = table.Get(i + 1).Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value as ISerializablePacket;
+                        for (var i = 0; i < table.Length; i++) {
+                            values[i] = table.Get(i + 1).Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value;
+                        }
                         return values;
                     }
 
@@ -136,7 +201,7 @@ namespace Sss.SssScripts.Lua {
                 DataType.Table, typeof(ISerializablePacket),
                 v => {
                     var table = v.Table;
-                    return table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value as ISerializablePacket;
+                    return table.Get(nameof(ISerializablePacket))?.ToObject<LuaWrapper<ILuaPacket>>().Value;
                 }
             );
         }
@@ -170,7 +235,9 @@ namespace Sss.SssScripts.Lua {
                 DataType.UserData, typeof(Table),
                 v => {
                     var userData = v.UserData;
-                    if (userData.Object is LuaController luaRpcService) return luaRpcService.Instance;
+                    if (userData.Object is LuaController luaRpcService) {
+                        return luaRpcService.Instance;
+                    }
                     return null;
                 }
             );

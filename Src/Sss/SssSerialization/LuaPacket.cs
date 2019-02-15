@@ -6,12 +6,13 @@ using Ssc.SscSerialization;
 using Sss.SssScripts.Lua;
 
 namespace Sss.SssSerialization {
-    internal interface ILuaPacket : IRecyclable {
+    internal interface ILuaPacket : IRecyclable,IAssignable,ISerializablePacket {
         Table Instance { get; }
     }
 
-    internal class LuaPacket : LuaSerializablePacket<ILuaPacket>, ILuaPacket {
+    internal class LuaPacket : LuaPoolAllocator<ILuaPacket>, ILuaPacket {
         private readonly LuaHelper _luaHelper;
+        public override string TypeName => Instance.Get("Interface")?.ToObject<string>();
         public Table Instance { get; }
         public LuaPacket(Table instance, LuaHelper luaHelper) {
             Instance = instance ?? throw new ArgumentNullException(nameof(instance));
@@ -33,7 +34,9 @@ namespace Sss.SssSerialization {
             Call("ToBinaryWriter", writer);
         }
 
-        public void Recycle() {
+        public override void Recycle() {
+            base.Recycle();
+
             Call("Dispose");
         }
     }

@@ -7,7 +7,7 @@ public interface ITestPacket : ISerializablePacket, IAssignable, IRecyclable {
     string Password { get; set; }
 }
 
-public class TestPacket : PoolAllocator<ITestPacket>, ITestPacket {
+public class TestPacket : SerializablePacket<ITestPacket>, ITestPacket {
     public string Name { get; set; }
     public string Password { get; set; }
 

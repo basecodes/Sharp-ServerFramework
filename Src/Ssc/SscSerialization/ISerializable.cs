@@ -45,5 +45,6 @@ namespace Ssc.SscSerialization {
             Dictionary<ISerializablePacket, IConvertible> dictionary);
 
         void SerializableObject(object obj);
+        void SerializableObject(Type type, object obj);
     }
 }

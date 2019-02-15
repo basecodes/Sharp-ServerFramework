@@ -207,20 +207,19 @@ namespace Ssc.SscSerialization {
 
         #endregion SerializeDictionary4
 
-        public void SerializableObject(object obj) {
-            if (obj == null) {
+        public void SerializableObject(Type type, object obj) {
+            if (type == null || obj == null) {
                 WriteStream.ShiftRight((byte)FieldType.NullType);
                 return;
             }
 
-            var type = obj.GetType();
             if (obj is IConvertible baseValue) {
                 Serialize(Type.GetTypeCode(type), baseValue);
                 return;
             }
 
             if (obj is ISerializablePacket packet) {
-                SerializePacket(type.Name, packet);
+                SerializePacket(packet.TypeName, packet);
                 return;
             }
 
@@ -232,15 +231,20 @@ namespace Ssc.SscSerialization {
                         baseArray[i] = (IConvertible)array.GetValue(i);
                     }
                     SerializeArray(Type.GetTypeCode(elementType), baseArray);
-                } else {
+                    return;
+                }
+
+                if(typeof(ISerializablePacket).IsAssignableFrom(elementType)){
                     var packets = new ISerializablePacket[array.Length];
+                    var typeName = "";
                     for (var i = 0; i < packets.Length; i++) {
                         var pkt = array.GetValue(i);
                         if (pkt is ISerializablePacket serializablePacket) {
                             packets[i] = serializablePacket;
+                            typeName = serializablePacket.TypeName;
                         }
                     }
-                    SerializePacketArray(elementType.Name, packets);
+                    SerializePacketArray(typeName, packets);
                 }
 
                 return;
@@ -255,9 +259,9 @@ namespace Ssc.SscSerialization {
                     var dicts = new Dictionary<IConvertible, IConvertible>();
 
                     foreach (DictionaryEntry item in dict) {
-                        var key = item.Key as IConvertible;
-                        var value = item.Value as IConvertible;
-                        dicts.Add(key, value);
+                        if (item.Key is IConvertible key && item.Value is IConvertible value) {
+                            dicts.Add(key, value);
+                        }
                     }
 
                     SerializeDictionaryBB(Type.GetTypeCode(keyType), Type.GetTypeCode(valueType), dicts);
@@ -266,35 +270,42 @@ namespace Ssc.SscSerialization {
 
                 if (typeof(IConvertible).IsAssignableFrom(keyType) && valueType.IsByRef) {
                     var dicts = new Dictionary<IConvertible, ISerializablePacket>();
+                    var valueName = "";
                     foreach (DictionaryEntry item in dict) {
-                        var key = item.Key as IConvertible;
-                        var value = item.Value as ISerializablePacket;
-
-                        dicts.Add(key, value);
+                        if (item.Key is IConvertible key && item.Value is ISerializablePacket serializablePacket) {
+                            dicts.Add(key, serializablePacket);
+                            valueName = serializablePacket.TypeName;
+                        }
                     }
-                    SerializeDictionaryBP(Type.GetTypeCode(keyType), valueType.Name, dicts);
+                    SerializeDictionaryBP(Type.GetTypeCode(keyType), valueName, dicts);
                     return;
                 }
 
                 if (keyType.IsByRef && valueType.IsByRef) {
+                    var keyName = "";
+                    var valueName = "";
                     var dicts = new Dictionary<ISerializablePacket, ISerializablePacket>();
                     foreach (DictionaryEntry item in dict) {
-                        var key = item.Key as ISerializablePacket;
-                        var value = item.Value as ISerializablePacket;
-                        dicts.Add(key, value);
+                        if (item.Key is ISerializablePacket spKey && item.Value is ISerializablePacket spValue) {
+                            dicts.Add(spKey, spValue);
+                            keyName = spKey.TypeName;
+                            valueName = spValue.TypeName;
+                        }
                     }
-                    SerializeDictionaryPP(keyType.Name, valueType.Name, dicts);
+                    SerializeDictionaryPP(keyName, valueName, dicts);
                     return;
                 }
 
                 if (keyType.IsByRef && typeof(IConvertible).IsAssignableFrom(valueType)) {
                     var dicts = new Dictionary<ISerializablePacket, IConvertible>();
+                    var keyName = "";
                     foreach (DictionaryEntry item in dict) {
-                        var key = item.Key as ISerializablePacket;
-                        var value = item.Value as IConvertible;
-                        dicts.Add(key, value);
+                        if (item.Key is ISerializablePacket key && item.Value is IConvertible value) {
+                            dicts.Add(key, value);
+                            keyName = key.TypeName;
+                        }
                     }
-                    SerializeDictionaryPB(keyType.Name, Type.GetTypeCode(valueType), dicts);
+                    SerializeDictionaryPB(keyName, Type.GetTypeCode(valueType), dicts);
                     return;
                 }
             }
@@ -302,5 +313,8 @@ namespace Ssc.SscSerialization {
             throw new NotSupportedException($"{obj.GetType().Name}类型不支持！");
         }
 
+        public void SerializableObject(object obj) {
+            SerializableObject(obj?.GetType(), obj);
+        }
     }
 }

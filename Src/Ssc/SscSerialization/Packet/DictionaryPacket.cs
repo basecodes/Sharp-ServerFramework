@@ -4,80 +4,60 @@ using Ssc.SscSerialization;
 using Ssc.SscStream;
 
 namespace Ssc.SscSerialization.Packet {
-    public class DictionaryPacket<K, V> : ISerializablePacket
+    public class DictionaryPacket<K, V> : SerializablePacket
         where K : IConvertible
         where V : IConvertible {
         public Dictionary<K, V> value { get; private set; }
-
-        public void FromBinaryReader(IEndianBinaryReader reader) {
+        public override string TypeName => typeof(Dictionary<K, V>).Name;
+        public override void FromBinaryReader(IEndianBinaryReader reader) {
             value = reader.ReadDictionaryBB<K, V>();
         }
 
-        public void ToBinaryWriter(IEndianBinaryWriter writer) {
+        public override void ToBinaryWriter(IEndianBinaryWriter writer) {
             writer.WriteDictionaryBB(value);
-        }
-
-        public void ToBytes(IWriteStream writeStream) {
-            var endianBinaryWriter = new EndianBinaryWriter(writeStream);
-            ToBinaryWriter(endianBinaryWriter);
         }
     }
 
-    public class DictionaryPacket2<K, V> : ISerializablePacket
+    public class DictionaryPacket2<K, V> : SerializablePacket
         where K : IConvertible
         where V : class ,ISerializablePacket{
         public Dictionary<K, V> value { get; private set; }
-
-        public void FromBinaryReader(IEndianBinaryReader reader) {
+        public override string TypeName => typeof(Dictionary<K, V>).Name;
+        public override void FromBinaryReader(IEndianBinaryReader reader) {
             value = reader.ReadDictionaryBP<K, V>();
         }
 
-        public void ToBinaryWriter(IEndianBinaryWriter writer) {
+        public override void ToBinaryWriter(IEndianBinaryWriter writer) {
             writer.WriteDictionaryBP(value);
-        }
-
-        public void ToBytes(IWriteStream writeStream) {
-            var endianBinaryWriter = new EndianBinaryWriter(writeStream);
-            ToBinaryWriter(endianBinaryWriter);
         }
     }
 
-    public class DictionaryPacket3<K, V> : ISerializablePacket
+    public class DictionaryPacket3<K, V> : SerializablePacket
         where K : class,ISerializablePacket
         where V : class,ISerializablePacket {
         public Dictionary<K, V> value { get; private set; }
-
-        public void FromBinaryReader(IEndianBinaryReader reader) {
+        public override string TypeName => typeof(Dictionary<K, V>).Name;
+        public override void FromBinaryReader(IEndianBinaryReader reader) {
             value = reader.ReadDictionaryPP<K, V>();
         }
 
-        public void ToBinaryWriter(IEndianBinaryWriter writer) {
+        public override void ToBinaryWriter(IEndianBinaryWriter writer) {
             writer.WriteDictionaryPP(value);
-        }
-
-        public void ToBytes(IWriteStream writeStream) {
-            var endianBinaryWriter = new EndianBinaryWriter(writeStream);
-            ToBinaryWriter(endianBinaryWriter);
         }
     }
 
-    public class DictionaryPacket4<K, V> : ISerializablePacket
+    public class DictionaryPacket4<K, V> : SerializablePacket
         where K : class,ISerializablePacket
         where V : IConvertible {
         public Dictionary<K, V> value { get; private set; }
+        public override string TypeName => typeof(Dictionary<K, V>).Name;
 
-        public void FromBinaryReader(IEndianBinaryReader reader) {
+        public override void FromBinaryReader(IEndianBinaryReader reader) {
             value = reader.ReadDictionaryPB<K, V>();
         }
 
-        public void ToBinaryWriter(IEndianBinaryWriter writer) {
+        public override void ToBinaryWriter(IEndianBinaryWriter writer) {
             writer.WriteDictionaryPB(value);
-        }
-
-
-        public void ToBytes(IWriteStream writeStream) {
-            var endianBinaryWriter = new EndianBinaryWriter(writeStream);
-            ToBinaryWriter(endianBinaryWriter);
         }
     }
 }

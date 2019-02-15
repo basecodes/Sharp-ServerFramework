@@ -28,6 +28,7 @@ namespace Ssf {
         public ModuleManager ModuleManager { get; }
         public RawMessageManager RawMessageManager { get; }
 
+        private ProjectConfig _rojectConfig;
         protected Startup() {
             Ssfi.Initialize();
 
@@ -52,8 +53,8 @@ namespace Ssf {
         protected virtual void RegisterModules(ModuleManager moduleManager) {
             var directory = SystemUtil.GetPorjectRootDirectory();
 
-            var pathConfig = JsonHelper.FromJsonFile<PathConfig>(directory + "/Configuration/Modules.json");
-            foreach (var item in pathConfig.Paths) {
+            _rojectConfig = JsonHelper.FromJsonFile<ProjectConfig>(directory + "/Configuration/Modules.json");
+            foreach (var item in _rojectConfig.Paths) {
 
                 if (item.Language == Language.CSharp) {
                     moduleManager.AddModuleFromDllFile(item.File, item.Entry);
@@ -150,7 +151,7 @@ namespace Ssf {
 
         private void ProjectShow() {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("ProjectName: " + Assembly.GetCallingAssembly().GetName().Name);
+            Console.WriteLine("ProjectName: " + _rojectConfig.ProjectName);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
         }
@@ -176,7 +177,7 @@ namespace Ssf {
             Console.WriteLine("Modules:");
             Console.ForegroundColor = ConsoleColor.White;
             foreach (var item in ModuleManager.ForeachInitializedModule()) {
-                Console.WriteLine(item.Value.ToString());
+                Console.WriteLine(item.Value.ModuleName);
             }
             Console.WriteLine();
         }

@@ -2,6 +2,7 @@
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
 using Ssc.SscLog;
+using Ssc.SscSerialization;
 
 namespace Sss.SssScripts.Lua {
     public class LuaHelper {
@@ -17,6 +18,7 @@ namespace Sss.SssScripts.Lua {
             UserStatic<TypeCode>();
             UserStatic<LuaProxy>();
             UserStatic<LuaLoader>();
+            UserStatic<FieldType>();
         }
 
         public static void RegisterType<T>() {
@@ -56,46 +58,70 @@ namespace Sss.SssScripts.Lua {
         }
 
         public DynValue Call(Table template, string methodName, params object[] args) {
-            if (template == null) throw new ArgumentNullException(nameof(template));
-            if (args == null) throw new ArgumentNullException(nameof(args));
-            if (string.IsNullOrEmpty(methodName))
+            if (template == null) {
+                throw new ArgumentNullException(nameof(template));
+            }
+
+            if (args == null) {
+                throw new ArgumentNullException(nameof(args));
+            }
+
+            if (string.IsNullOrEmpty(methodName)) {
                 throw new ArgumentException(nameof(methodName));
-            
+            }
+
             var func = Get(template, methodName);
-            if (func == DynValue.Nil) throw new NotImplementedException(methodName);
+            if (func == DynValue.Nil) {
+                throw new NotImplementedException(methodName);
+            }
 
             return _script.Call(func, args);
         }
 
-        public static DynValue Get(Table template, string methodName) {
-            if (template == null) throw new ArgumentNullException(nameof(template));
-            if (string.IsNullOrEmpty(methodName))
-                throw new ArgumentException(nameof(methodName));
-            
-            var func = template.Get(methodName);
-            if (func == DynValue.Nil) {
-                if (template.MetaTable == null) return DynValue.Nil;
-                var table = template.MetaTable.Get("__index");
-                if (table == DynValue.Nil) return DynValue.Nil;
-                return Get(table.Table, methodName);
+        public static DynValue Get(Table template, string filedName) {
+            if (template == null) {
+                throw new ArgumentNullException(nameof(template));
             }
 
-            return func;
+            if (string.IsNullOrEmpty(filedName)) {
+                throw new ArgumentException(nameof(filedName));
+            }
+            
+            var value = template.Get(filedName);
+            if (value == DynValue.Nil) {
+                if (template.MetaTable == null) {
+                    return DynValue.Nil;
+                }
+                var table = template.MetaTable.Get("__index");
+                if (table == DynValue.Nil) {
+                    return DynValue.Nil;
+                }
+                return Get(table.Table, filedName);
+            }
+
+            return value;
         }
 
         public DynValue Call(Table template, string methodName) {
-            if (template == null) throw new ArgumentNullException(nameof(template));
-            if (string.IsNullOrEmpty(methodName))
-                throw new ArgumentException(nameof(methodName));
+            if (template == null) {
+               throw new ArgumentNullException(nameof(template));
+            }
+            if (string.IsNullOrEmpty(methodName)) {
+               throw new ArgumentException(nameof(methodName));
+            }
             
             var func = Get(template, methodName);
-            if (func == DynValue.Nil) throw new NotImplementedException(methodName);
+            if (func == DynValue.Nil) {
+               throw new NotImplementedException(methodName);
+            }
 
             return _script.Call(func);
         }
         
         public DynValue Call(DynValue function, params object[] args) {
-            if (function == null) throw new ArgumentNullException(nameof(function));
+            if (function == null) {
+                throw new ArgumentNullException(nameof(function));
+            }
 
             try {
                 return _script.Call(function,args);

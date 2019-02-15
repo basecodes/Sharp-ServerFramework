@@ -16,7 +16,8 @@ namespace Ssc.SscConfiguration {
         public string Search { get; set; }
     }
 
-    public class PathConfig {
+    public class ProjectConfig {
+        public string ProjectName { get; set; }
         public List<SinglePath> Paths { get; set; }
     }
 }

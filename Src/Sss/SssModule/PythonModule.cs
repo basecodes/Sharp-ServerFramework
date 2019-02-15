@@ -27,6 +27,9 @@ namespace Sss.SssModule {
         public List<string> RpcMethodIds { get; }
         public List<string> RpcPacketTypes {get;}
 
+        public abstract string ServiceId { get; }
+        public string ModuleName => throw new NotImplementedException();
+
         private IServer _server;
         private PythonHelper _pythonHelper;
         public PythonModule() {
@@ -37,8 +40,6 @@ namespace Sss.SssModule {
         protected void SetPythonHelper(PythonHelper pythonHelper) {
             _pythonHelper = pythonHelper ?? throw new ArgumentNullException(nameof(pythonHelper));
         }
-
-        public abstract string ServiceId { get; }
 
         public virtual void Initialize(IServer server, ICacheManager cacheManager,
             IControllerComponentManager controllerComponentManager) {

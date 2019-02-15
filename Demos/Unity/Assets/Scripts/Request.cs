@@ -13,6 +13,7 @@ public class Request : SsuMonoBehaviour {
     public Text Text1;
     public Text Text2;
     public Text Text3;
+
     void Start() {
         btn1.onClick.AddListener(() => {
             Ssui.Invoke<ITestRequest>(() => (t) => t.Test(100, "string"));
@@ -43,9 +44,10 @@ public class Request : SsuMonoBehaviour {
         Ssui.RegisterPacket<ITestPacket, TestPacket>();
     }
 
-    private void TestResponse(string request, ITestPacket testPacket,IPeer peer, Action<Action> action) {
-        Text3.text = request+" "+testPacket.Name+" "+testPacket.Password;
+    private void TestResponse(string request, ITestPacket testPacket, IPeer peer, Action<Action> action) {
+        Text3.text = request + " " + testPacket.Name + " " + testPacket.Password;
     }
+
     private void TestResponse(string request, IPeer peer, Action<Action> action) {
         Text1.text = request;
     }

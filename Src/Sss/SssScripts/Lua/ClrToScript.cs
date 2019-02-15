@@ -35,7 +35,9 @@ namespace Sss.SssScripts.Lua {
                 typeof(LuaPacket),
                 (v, o) => {
                     if (o is LuaPacket luaPacket) {
-                        if (Equals(luaPacket.Instance.Get(nameof(ISerializablePacket)), DynValue.Nil)) return UserData.Create(o);
+                        if (Equals(luaPacket.Instance.Get(nameof(ISerializablePacket)), DynValue.Nil)) {
+                            return UserData.Create(o);
+                        }
                         return DynValue.NewTable(luaPacket.Instance);
                     }
 

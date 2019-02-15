@@ -7,11 +7,12 @@ using Ssc.SscSerialization;
 using Ssc.SscStream;
 
 namespace Sss.SssSerialization {
-    internal abstract class LuaSerializablePacket<T> : ISerializablePacket where T : class, IRecyclable {
+    internal abstract class LuaPoolAllocator<T>:SerializablePacket<T> 
+        where T : ISerializablePacket,IRecyclable,IAssignable {
         
-        private  static readonly Dictionary<string, ObjectPool<T>> 
-            _objectPools = new Dictionary<string, ObjectPool<T>>();
-        private static readonly Logger Logger = LogManager.GetLogger<LuaSerializablePacket<T>>(LogType.Middle);
+
+        private  static readonly Dictionary<string, ObjectPool<T>> _objectPools = new Dictionary<string, ObjectPool<T>>();
+        private static readonly Logger Logger = LogManager.GetLogger<LuaPoolAllocator<T>>(LogType.Middle);
 
         public abstract void ToBinaryWriter(IEndianBinaryWriter writer);
 

@@ -1,5 +1,5 @@
 ﻿namespace Ssc.SscSerialization {
-    internal enum FieldType : byte {
+    public enum FieldType : byte {
         NullType,
         BaseType,
         PacketType,

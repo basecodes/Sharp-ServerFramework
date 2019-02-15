@@ -1,5 +1,5 @@
 ﻿namespace Ssc.SscSerialization {
-    public interface ISerializablePacket {
+    public interface ISerializablePacket:IType {
         
         void ToBinaryWriter(IEndianBinaryWriter writer);
         void FromBinaryReader(IEndianBinaryReader reader);

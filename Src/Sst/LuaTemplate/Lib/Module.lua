@@ -2,22 +2,25 @@
 
 local Module = Classes.class()
 
-function Module:init(child,id)
-	self.IModule = LuaProxy:New(child,id,LuaHelper)
+function Module:init(child)
+	self.IModule = LuaProxy:New(child,LuaHelper)
+
+	self.ModuleName = ""
+	self.ServiceId = ""
 end
 
 -- abstract
-function Module:Initialize(server,cacheManager,rpcComponentManager)
+function Module:Initialize(server,cacheManager,controllerComponentManager)
 	-- Body
 end
 
 -- abstract
-function Module:InitFinish(server,cacheManager,rpcComponentManager)
+function Module:InitFinish(server,cacheManager,controllerComponentManager)
 	-- Body
 end
 
 -- abstract
-function Module:Dispose(cacheManager,rpcComponentManager)
+function Module:Dispose(cacheManager,controllerComponentManager)
 	-- Body
 end
 
@@ -27,7 +30,7 @@ function Module:Dispose()
 end
 
 -- abstract
-function Module:Finish(server,cacheManager,rpcComponentManager)
+function Module:Finish(server,cacheManager,controllerComponentManager)
 	-- Body
 end
 

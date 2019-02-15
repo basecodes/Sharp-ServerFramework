@@ -1,7 +1,8 @@
 ﻿{
+  "ProjectName": "PythonModule",
   "Paths": [
     {
-      "Language":"Python",
+      "Language": "Python",
       "File": "Start.py",
       "Entry": "Startup",
       "Search": "./Lib;D:/Program Files/IronPython 2.7/Lib;C:/Program Files/dotnet/sdk/2.2.103;./Modules;./Controllers;./Python;./Packets;C:/Program Files/dotnet/sdk/2.2.103/Microsoft/Microsoft.NET.Build.Extensions/net461/lib"

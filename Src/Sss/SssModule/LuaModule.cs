@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using MoonSharp.Interpreter;
 using Ssc;
 using Ssc.Ssc;
@@ -29,16 +28,17 @@ namespace Sss.SssModule {
         private readonly Table _table;
 
         private IServer _server;
-        public string ServiceId { get; }
+        public string ServiceId => LuaHelper.Get(_table, nameof(ServiceId)).ToObject<string>();
 
-        public LuaModule(Table table, string id, LuaHelper luaHelper) {
+        public string ModuleName => LuaHelper.Get(_table,nameof(ModuleName)).ToObject<string>();
+
+        public LuaModule(Table table, LuaHelper luaHelper) {
             
             _table = table ?? throw new ArgumentNullException(nameof(table));
             _luaHelper = luaHelper ?? throw new ArgumentNullException(nameof(luaHelper));
 
             RpcMethodIds = new List<string>();
             RpcPacketTypes = new List<string>();
-            ServiceId = id;
             
             luaHelper.UserStatic<Ssci>();
 
@@ -130,7 +130,7 @@ namespace Sss.SssModule {
                 return;
             }
 
-            LuaSerializablePacket<ILuaPacket>.CreateObjectPool(interfaceName, args => {
+            LuaPoolAllocator<ILuaPacket>.CreateObjectPool(interfaceName, args => {
                 var dynValue = newTable.Call();
                 if (Equals(dynValue, DynValue.Nil)) {
                     throw new DynamicCreateObjectException($"动态创建{interfaceName}表失败!");
@@ -140,7 +140,7 @@ namespace Sss.SssModule {
             });
 
             PacketManager.Register(interfaceName, typeof(ILuaPacket),
-                args => (ISerializablePacket)LuaSerializablePacket<ILuaPacket>.GetObject(interfaceName));
+                args => LuaPoolAllocator<ILuaPacket>.GetObject(interfaceName));
 
             RpcPacketTypes.Add(interfaceName);
         }
