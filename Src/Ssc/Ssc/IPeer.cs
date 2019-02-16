@@ -2,7 +2,7 @@
 using Ssc.SscSerialization;
 
 namespace Ssc.Ssc {
-    public interface IPeer :IMessageDispatcher,IRecyclable,IAssignable {
+    public interface IPeer :IMessageDispatcher,IMemoryable {
         
         Guid ID { get; }
         Connection Connection { get; }

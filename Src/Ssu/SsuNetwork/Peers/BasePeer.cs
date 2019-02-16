@@ -4,9 +4,10 @@ using Ssc.Ssc;
 using Ssc.SscLog;
 using Ssc.SscSerialization;
 using Ssc.SscStream;
+using Ssc.SscTemplate;
 
 namespace Ssu.SsuNetwork.Peers {
-    public abstract class BasePeer : IPeer {
+    public abstract class BasePeer :PoolAllocator<IPeer>, IPeer {
         private static readonly Logger Logger = LogManager.GetLogger<BasePeer>(LogType.Middle);
         private readonly ConcurrentDictionary<ulong, ResponseCallback> _acks;
         private readonly ConcurrentDictionary<ulong, Action> _callback;
@@ -56,7 +57,7 @@ namespace Ssu.SsuNetwork.Peers {
         }
 
         public void Dispose() {
-            Recycle();
+            Recycle(this);
         }
 
         public void Recycle() {

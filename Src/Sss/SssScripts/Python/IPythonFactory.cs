@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sss.SssScripts.Pythons {
-    public interface IPythonFactory:IFactory {
+namespace Sss.SssScripts.Python {
+    public interface IPythonFactory:IMemoryable {
     }
 }

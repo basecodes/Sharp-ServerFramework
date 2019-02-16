@@ -6,9 +6,9 @@ local TestController = Classes.class(Controller)
 function TestController:init()
     self.super:init(self)
 
-	self:Register("+[User-5F674579-4D3F-42DE-A72C-A8B46AE94908]+", self.Test1)
-	self:Register("+[User-1ECE00D8-614A-481F-861E-D20EEA55247C]+", self.Test2)
-	self:Register("+[User-26D0A8C7-3D9B-4AC9-B6AF-700A61E23BFB]+", self.Test3)
+	self:Register("User-5F674579-4D3F-42DE-A72C-A8B46AE94908", self.Test1)
+	self:Register("User-1ECE00D8-614A-481F-861E-D20EEA55247C", self.Test2)
+	self:Register("User-26D0A8C7-3D9B-4AC9-B6AF-700A61E23BFB", self.Test3)
 end
 
 function TestController:Test1(num,str,peer,callback)

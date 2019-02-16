@@ -4,16 +4,10 @@ using Ssc.SscPool;
 
 namespace Ssc.SscTemplate {
 
-    public class PoolAllocator<T> where T : IRecyclable,IAssignable{
+    public class PoolAllocator<T> where T : IMemoryable{
 
         private static ObjectPool<T> _objectPools;
         private static readonly Logger Logger = LogManager.GetLogger<PoolAllocator<T>>(LogType.Middle);
-        
-        public virtual void Recycle() {
-            if (this is T value) {
-                _objectPools?.PutObject(value);
-            }
-        }
 
         public static void SetPool(ObjectActivator<T> objectGenerator) {
             if (_objectPools != null) {
@@ -41,9 +35,6 @@ namespace Ssc.SscTemplate {
             
             value.Recycle();
             _objectPools?.PutObject(value);
-        }
-
-        public virtual void Assign() {
         }
     }
 }

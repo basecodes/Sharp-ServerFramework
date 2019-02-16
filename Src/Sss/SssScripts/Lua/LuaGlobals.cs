@@ -2,7 +2,7 @@
 using MoonSharp.Interpreter;
 using Ssc.SscSerialization;
 using Sss.SssRpc;
-using Sss.SssSerialization;
+using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
     public class LuaGlobals {

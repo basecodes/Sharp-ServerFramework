@@ -20,12 +20,10 @@ namespace Ssc.SscStream {
         private int _startOffset;
 
         public void Dispose() {
-            Recycle();
+            Recycle(this);
         }
 
-        public override void Recycle() {
-            base.Recycle();
-
+        public void Recycle() {
             ObjectFactory.Recycle(_buffer);
             _buffer = null;
             _maxCount = 0;
@@ -64,8 +62,7 @@ namespace Ssc.SscStream {
         }
 
         // 分配对象调用
-        public override void Assign() {
-            base.Assign();
+        public void Assign() {
 
             _buffer = ObjectFactory.CreateBuffer();
             _maxCount = Ssci.StreamConfig.BufferSize - Ssci.StreamConfig.PacketOffset;

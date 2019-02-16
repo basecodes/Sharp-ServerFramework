@@ -5,8 +5,8 @@ using Ssc.Ssc;
 using Ssc.SscSerialization;
 using Sss.SssScripts.Lua;
 
-namespace Sss.SssSerialization {
-    internal interface ILuaPacket : IRecyclable,IAssignable,ISerializablePacket {
+namespace Sss.SssSerialization.Lua {
+    internal interface ILuaPacket : ISerializablePacket {
         Table Instance { get; }
     }
 
@@ -34,10 +34,11 @@ namespace Sss.SssSerialization {
             Call("ToBinaryWriter", writer);
         }
 
-        public override void Recycle() {
-            base.Recycle();
-
+        public void Recycle() {
             Call("Dispose");
+        }
+
+        public void Assign() {
         }
     }
 }

@@ -42,8 +42,5 @@ class Module(PythonModule):
 	def SetObjectPool(self,interface,implement):
 		PythonModule.SetObjectPool(self,interface,implement)
 
-	def SetPacketPool(self,interface,implement):
-		PythonModule.SetPacketPool(self,interface,implement)
-
 	def AddPacket(self,interface,implement):
 		PythonModule.AddPacket(self,interface,implement)

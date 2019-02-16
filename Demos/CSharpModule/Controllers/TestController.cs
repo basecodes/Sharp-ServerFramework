@@ -1,5 +1,4 @@
 ﻿using Common.CSharp;
-using Ssc;
 using Ssc.Ssc;
 using Ssc.SscLog;
 using System;
@@ -17,24 +16,23 @@ namespace CSharpModule.Controllers {
 
         private void Initialize() {
             Register<ITestController>(
-                (tc) => tc.Test(0, null, null,null),
+                (tc) => tc.Test(0, null, null, null),
                 () => this.Test(0, null, null, null));
 
             Register<ITestController>(
-                (tc) => tc.Test(0, null, null, null,null),
-                () => this.Test(0, null, null, null,null));
+                (tc) => tc.Test(0, null, null, null, null),
+                () => this.Test(0, null, null, null, null));
 
             Register<ITestController>(
-                (tc) => tc.Test(0, null, null, null, null,null),
-                () => this.Test(0, null, null, null, null,null));
+                (tc) => tc.Test(0, null, null, null, null, null),
+                () => this.Test(0, null, null, null, null, null));
         }
 
         public bool Test(int num, string str, IPeer peer, Action<Action> callback) {
             Logger.Info(num);
             Logger.Info(str);
             var value = num + " " + str;
-            // 请求客户端，客户端会收到两条信息，一个请求信息，一个当前方法返回信息
-            Ssci.Invoke<ITestRequest>(() => (req) => req.TestRequest(value), peer);
+            Invoke<ITestRequest>(() => (req) => req.TestRequest(value), peer);
             return true;
         }
 
@@ -64,7 +62,7 @@ namespace CSharpModule.Controllers {
 
             var value = num + " " + str;
             var packet = testPackets.First();
-            Ssci.Invoke<ITestRequest>(() => (req) => req.TestRequest(value,packet), peer);
+            Invoke<ITestRequest>(() => (req) => req.TestRequest(value, packet), peer);
             return true;
         }
     }

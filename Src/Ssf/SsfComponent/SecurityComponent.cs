@@ -6,13 +6,14 @@ namespace Ssf.SsfComponent {
         public string AesKey { get; set; }
         public byte[] Encryptkey { get; set; }
 
-        public void Dispose() {
-            Recycle();
+        public void Assign() {
         }
 
-        public override void Recycle() {
-            base.Recycle();
+        public void Dispose() {
+            Recycle(this);
+        }
 
+        public void Recycle() {
             AesKey = null;
             Encryptkey = null;
         }

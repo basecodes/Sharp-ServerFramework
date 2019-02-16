@@ -14,6 +14,7 @@ using Ssm.SsmModule;
 using Ssm.SsmService;
 using Sss.SssScripts.Lua;
 using Sss.SssSerialization;
+using Sss.SssSerialization.Lua;
 
 namespace Sss.SssModule {
     internal class LuaModule : IModule {

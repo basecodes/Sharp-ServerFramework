@@ -6,7 +6,7 @@ using Ssc.SscStream;
 using Ssc.SscTemplate;
 
 namespace Ssf.SsfNetwork.Sockets {
-    public class SocketService : PoolAllocator<SocketService>, IRecyclable, IAssignable {
+    public class SocketService : PoolAllocator<SocketService>, IMemoryable {
         private static readonly Logger Logger = LogManager.GetLogger<SocketService>(LogType.Low);
 
         public event Action HandleDisconnect;
@@ -40,12 +40,10 @@ namespace Ssf.SsfNetwork.Sockets {
             RecvCounter++;
         }
         
-        public override void Assign() {
-            base.Assign();
+        public void Assign() {
         }
 
-        public override void Recycle() {
-            base.Recycle();
+        public void Recycle() {
 
             HandleDisconnect = null;
             HandleWrite = null;

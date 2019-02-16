@@ -7,7 +7,6 @@ from System import TypeCode
 
 class ISerializablePacket(PythonISerializablePacket):
 	def __init__(self):
-		PythonISerializablePacket.__init__(self)
 		self.char = TypeCode.Char
 		self.bool = TypeCode.Boolean
 		self.sbyte = TypeCode.SByte

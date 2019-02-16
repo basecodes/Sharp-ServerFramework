@@ -2,7 +2,7 @@
 using Ssc.Ssc;
 
 namespace Ssc.SscStream {
-    public interface IStream:IDisposable,IRecyclable,IAssignable {
+    public interface IStream:IDisposable,IMemoryable {
         ByteFragment ToByteFragment();
         void Reset();
     }

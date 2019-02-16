@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using IronPython.Runtime;
 using IronPython.Runtime.Types;
 using Ssc.Ssc;
 using Ssc.SscLog;
@@ -14,8 +11,7 @@ using Ssm.Ssm;
 using Ssm.SsmManager;
 using Ssm.SsmModule;
 using Ssm.SsmService;
-using Sss.SssScripts.Lua;
-using Sss.SssScripts.Pythons;
+using Sss.SssScripts.Python;
 
 namespace Sss.SssModule {
     public abstract class PythonModule : IModule {
@@ -28,7 +24,7 @@ namespace Sss.SssModule {
         public List<string> RpcPacketTypes {get;}
 
         public abstract string ServiceId { get; }
-        public string ModuleName => throw new NotImplementedException();
+        public string ModuleName => PythonHelper.GetPythonTypeName(this);
 
         private IServer _server;
         private PythonHelper _pythonHelper;
@@ -101,24 +97,6 @@ namespace Sss.SssModule {
             }
 
             PoolAllocator<IPythonFactory>.SetPool(arguments => implement());
-            LuaHelper.RegisterType(type);
-        }
-        
-        protected void SetPacketPool(ISerializablePacket serializablePacket,dynamic implement){
-            if (serializablePacket == null) {
-                throw new ArgumentNullException(nameof(serializablePacket));
-            }
-
-            if (!(serializablePacket is IFactory)) {
-                throw new ArgumentException($"为实现{nameof(IFactory)}接口！");
-            }
-
-            var interfaceType = serializablePacket.GetType();
-
-            PoolAllocator<IPythonSerializable>.SetPool(arguments => implement());
-            PacketManager.Register(interfaceType,args => (
-                PoolAllocator<IPythonSerializable>.GetObject(args)) as ISerializablePacket);
-            LuaHelper.RegisterType(interfaceType);
         }
         
         public void AddPacket(PythonType interfaceType,dynamic implement){
@@ -136,10 +114,10 @@ namespace Sss.SssModule {
                 return;
             }
 
-            PacketManager.Register(interfaceName,interfaceType.__clrtype__(),args => implement());
-
+            PoolAllocator<ISerializablePacket>.SetPool(arguments => implement());
+            PacketManager.Register(interfaceName,typeof(IPythonObject), 
+                args => PoolAllocator<ISerializablePacket>.GetObject(args));
             RpcPacketTypes.Add(interfaceName);
-            LuaHelper.RegisterType(interfaceType);
         }
 
         public void Dispose() {

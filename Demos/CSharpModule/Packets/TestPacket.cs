@@ -7,6 +7,12 @@ namespace CSharpModule.Packets {
         public string Name { get; set; }
         public string Password { get; set; }
 
+        public void Assign() {
+        }
+
+        public void Recycle() {
+        }
+
         public void FromBinaryReader(IEndianBinaryReader reader) {
             Name = reader.Read<string>();
             Password = reader.Read<string>();

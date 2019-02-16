@@ -158,11 +158,11 @@ MonoBehaviour:
       BufferLength: 4096
       PacketOffset: 128
     AckInterval: 3000
-    KeepAlive: 1
+    KeepAlive: 0
     PacketFilterCount: 10
     ResendInterval: 1000
     MaxReconnectCount: 3
-    FragmentResend: 1
+    FragmentResend: 0
     ServerIp: 127.0.0.1
     ServerPort: 5000
   Callback:
@@ -379,7 +379,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260, y: 252}
+  m_AnchoredPosition: {x: -149, y: 244}
   m_SizeDelta: {x: 239.7, y: 79.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &514051169
@@ -737,7 +737,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260, y: 142}
+  m_AnchoredPosition: {x: -149, y: 134}
   m_SizeDelta: {x: 239.7, y: 79.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1036285904
@@ -855,7 +855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260, y: 26}
+  m_AnchoredPosition: {x: -149, y: 18}
   m_SizeDelta: {x: 239.7, y: 79.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1815316506

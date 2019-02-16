@@ -59,5 +59,13 @@ namespace Ssc.Ssc {
             var method = Ssci.Register(methodId, callback);
             MethodIds.Add(method.Id);
         }
+
+        public void Invoke<T>(Func<Expression<Action<T>>> func, IPeer peer, ResponseCallback responseCallback) {
+            Ssci.Invoke(func, peer, responseCallback);
+        }
+
+        public void Invoke<T>(Func<Expression<Action<T>>> func, IPeer peer) {
+            Invoke(func, peer, null);
+        }
     }
 }

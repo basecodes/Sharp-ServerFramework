@@ -132,16 +132,17 @@ namespace Ssf.SsfNetwork.Peers {
         }
 
         public void Dispose() {
-            Recycle();
+            Recycle(this);
         }
 
-        public override void Recycle() {
-            base.Recycle();
-
+        public virtual void Recycle() {
             _acks.Clear();
             _callback.Clear();
             _components.Clear();
             ID = Guid.NewGuid();
+        }
+
+        public void Assign() {
         }
     }
 }

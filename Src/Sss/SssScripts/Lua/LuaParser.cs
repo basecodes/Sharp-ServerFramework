@@ -6,7 +6,7 @@ using MoonSharp.Interpreter;
 using Ssc.SscFactory;
 using Ssc.SscLog;
 using Ssc.SscSerialization;
-using Sss.SssSerialization;
+using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
     internal class LuaParser {

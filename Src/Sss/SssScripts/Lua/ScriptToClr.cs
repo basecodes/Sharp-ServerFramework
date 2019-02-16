@@ -9,7 +9,7 @@ using Ssc.SscSerialization;
 using Ssm.SsmComponent;
 using Sss.SssComponent;
 using Sss.SssRpc;
-using Sss.SssSerialization;
+using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
     internal static class ScriptToClr {        

@@ -83,21 +83,12 @@ namespace Ssm.SsmModule {
         }
 
         protected void SetObjectPool<Interface, Implement>()
-            where Interface : IRecyclable,IAssignable
+            where Interface : IMemoryable
             where Implement : Interface {
                         
             PoolAllocator<Interface>.SetPool(
                 arguments => ObjectFactory.GetActivator<Interface>( 
                     typeof(Implement).GetConstructors().First())(arguments));
-        }
-        
-        protected void SetPacketPool<Interface, Implement>()
-            where Interface : class,ISerializablePacket,IRecyclable,IAssignable
-            where Implement : Interface {
-            
-            SetObjectPool<Interface, Implement>();
-            
-            PacketManager.Register<Interface>(args => PoolAllocator<Interface>.GetObject(args));
         }
 
         protected void AddPacket<Interface, Implement>()
@@ -109,8 +100,10 @@ namespace Ssm.SsmModule {
                 return;
             }
 
-            PacketManager.Register<Interface>(args => new Implement());
-            
+            SetObjectPool<Interface, Implement>();
+
+            PacketManager.Register<Interface>(args => PoolAllocator<Interface>.GetObject(args));
+
             RpcPacketTypes.Add(typeof(Interface).Name);
         }
 

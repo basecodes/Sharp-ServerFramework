@@ -6,7 +6,7 @@ using Ssc.Ssc;
 
 namespace Common.CSharp {
 
-    public interface ITestPacket : ISerializablePacket, IFactory {
+    public interface ITestPacket : ISerializablePacket {
         string Name { get; set; }
         string Password { get; set; }
     }

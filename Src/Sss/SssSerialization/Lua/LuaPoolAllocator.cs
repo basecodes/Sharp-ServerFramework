@@ -6,9 +6,9 @@ using Ssc.SscPool;
 using Ssc.SscSerialization;
 using Ssc.SscStream;
 
-namespace Sss.SssSerialization {
+namespace Sss.SssSerialization.Lua {
     internal abstract class LuaPoolAllocator<T>:SerializablePacket<T> 
-        where T : ISerializablePacket,IRecyclable,IAssignable {
+        where T : ISerializablePacket {
         
 
         private  static readonly Dictionary<string, ObjectPool<T>> _objectPools = new Dictionary<string, ObjectPool<T>>();

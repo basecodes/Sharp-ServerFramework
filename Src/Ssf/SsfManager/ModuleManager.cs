@@ -9,7 +9,7 @@ using Ssc.SscFactory;
 using Ssc.SscLog;
 using Ssm.SsmModule;
 using Sss.SssScripts.Lua;
-using Sss.SssScripts.Pythons;
+using Sss.SssScripts.Python;
 
 namespace Ssf.SsfManager {
     public class ModuleManager {

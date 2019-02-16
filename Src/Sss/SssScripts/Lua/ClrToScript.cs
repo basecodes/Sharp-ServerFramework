@@ -1,7 +1,7 @@
 ﻿using MoonSharp.Interpreter;
 using Ssc.SscSerialization;
 using Sss.SssComponent;
-using Sss.SssSerialization;
+using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
     internal static class ClrToScript {

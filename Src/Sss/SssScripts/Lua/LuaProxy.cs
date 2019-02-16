@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using MoonSharp.Interpreter;
 using Ssc;
 using Ssc.Ssc;
@@ -13,7 +12,7 @@ using Ssm.Ssm;
 using Sss.SssComponent;
 using Sss.SssModule;
 using Sss.SssRpc;
-using Sss.SssSerialization;
+using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
     internal class LuaProxy {
@@ -62,12 +61,6 @@ namespace Sss.SssScripts.Lua {
                 throw new ArgumentNullException(nameof(func));
             }
 
-            var pattern = @"^[+][\[](.*)[\]][+]$";
-            var match = Regex.Match(id, pattern);
-            if (!match.Success) {
-                throw new ArgumentException(nameof(id));
-            }
-
             object LateBoundMethod(params object[] args) {
                 var list = new List<object> { instance };
 
@@ -77,9 +70,8 @@ namespace Sss.SssScripts.Lua {
                 return func.Call(list.ToArray()).ToObject();
             }
 
-            var key = match.Groups[1].Value;
-            RpcRegister.RegisterMethod(key, LateBoundMethod);
-            return key;
+            RpcRegister.RegisterMethod(id, LateBoundMethod);
+            return id;
         }
 
         public static LuaWrapper<LuaPeerComponent> NewPeerComponent(Table instance, LuaHelper luaHelper) {

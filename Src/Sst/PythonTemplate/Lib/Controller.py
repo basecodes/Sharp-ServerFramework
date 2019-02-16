@@ -4,7 +4,7 @@ clr.AddReference("Ssc")
 clr.AddReference("Sss")
 
 from Ssc.Ssc import Controller as PythonController
-from Sss.SssScripts.Pythons import PythonProxy
+from Sss.SssScripts.Python import PythonProxy
 
 class Controller(PythonController):
 	def __init__(self):

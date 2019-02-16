@@ -7,7 +7,7 @@ using IronPython.Runtime;
 using IronPython.Runtime.Types;
 using Microsoft.Scripting.Hosting;
 
-namespace Sss.SssScripts.Pythons {
+namespace Sss.SssScripts.Python {
     public class PythonHelper {
         private readonly ScriptEngine _scriptEngine;
         private ScriptScope _scriptScope;
@@ -15,7 +15,7 @@ namespace Sss.SssScripts.Pythons {
         public PythonHelper() {
             var options = new Dictionary<string, object>();
             options["Debug"] = true;
-            _scriptEngine = Python.CreateEngine(options);
+            _scriptEngine =IronPython.Hosting.Python.CreateEngine(options);
         }
 
         public void SetVariable<T>(string name,T value) {

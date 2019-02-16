@@ -1,15 +1,13 @@
-﻿using Ssc.Ssc;
-using Ssc.SscTemplate;
-using System;
+﻿using Ssc.SscTemplate;
 
 namespace Ssc.SscSerialization {
 
-    public interface IType {
+    public interface IObjectType {
         string TypeName { get; }
     }
 
-    public abstract class SerializablePacket<T> : PoolAllocator<T>,IType
-         where T : ISerializablePacket, IRecyclable, IAssignable {
+    public abstract class SerializablePacket<T> : PoolAllocator<T>,IObjectType
+         where T : ISerializablePacket {
 
         public virtual string TypeName => typeof(T).Name;
     }
@@ -20,5 +18,11 @@ namespace Ssc.SscSerialization {
 
         public abstract void ToBinaryWriter(IEndianBinaryWriter writer);
         public abstract void FromBinaryReader(IEndianBinaryReader reader);
+
+        public virtual void Assign() {
+        }
+
+        public virtual void Recycle() {
+        }
     }
 }

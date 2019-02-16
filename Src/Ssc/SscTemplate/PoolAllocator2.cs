@@ -6,7 +6,7 @@ using Ssc.SscLog;
 using Ssc.SscPool;
 
 namespace Ssc.SscTemplate {
-    public class PoolAllocator2<T> where T : IRecyclable,IAssignable,new() {
+    public class PoolAllocator2<T> where T : IMemoryable,new() {
 
         private static ObjectPool<T> _objectPools = new ObjectPool<T>((args) =>
         ObjectFactory.GetActivator<T>(typeof(T).GetConstructors().First())());

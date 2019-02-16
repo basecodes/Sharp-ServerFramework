@@ -10,4 +10,6 @@ class TestModule(Module):
 	def Initialize(self,server,cacheManager,controllerComponentManager):
 		Module.Initialize(self,server,cacheManager,controllerComponentManager)
 		self.AddController(lambda :TestController())
+		imp = TestPacket()
+		print(imp.TypeName)
 		self.AddPacket(ITestPacket,lambda :TestPacket())

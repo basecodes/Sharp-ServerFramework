@@ -64,7 +64,6 @@ namespace Ssf.SsfNetwork.Peers {
 
         public override void Recycle() {
             base.Recycle();
-
             Status = ConnectionStatus.None;
             _socketService = null;
             _serverSocket = null;

@@ -17,7 +17,9 @@ namespace Ssc.SscRpc {
 
         public static void Register(string interfaceName, Type interfaceType,
             ObjectActivator<ISerializablePacket> objectGenerator) {
-            if (string.IsNullOrEmpty(interfaceName)) throw new ArgumentException(nameof(interfaceName));
+            if (string.IsNullOrEmpty(interfaceName)) {
+                throw new ArgumentException(nameof(interfaceName));
+            }
 
             if (_objectGenerators.ContainsKey(interfaceName)) {
                 Logger.Warn($"已经注册过{interfaceName}类！");

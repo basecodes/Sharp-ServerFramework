@@ -6,7 +6,7 @@ using Ssc.SscTemplate;
 using System;
 
 namespace Test {
-    public interface IPlayer : ISerializablePacket,IRecyclable,IAssignable {
+    public interface IPlayer : ISerializablePacket {
         string UserName { get; }
         int ID { get; }
         bool Sex { get; }
@@ -17,7 +17,7 @@ namespace Test {
         int PlayTimes { get; }
     }
 
-    public class Player : PoolAllocator<IPlayer>, IPlayer {
+    public class Player : SerializablePacket<IPlayer>, IPlayer {
         public string UserName { get; set; }
         public int ID { get; set; }
         public bool Sex { get; set; }
@@ -27,7 +27,14 @@ namespace Test {
         public int CardCount { get; set; }
         public int PlayTimes { get; set; }
 
+        public void Assign() {
+        }
+
+        public void Recycle() {
+        }
+
         public void Dispose() {
+            Recycle(this);
         }
 
         public void FromBinaryReader(IEndianBinaryReader reader) {

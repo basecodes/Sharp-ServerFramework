@@ -17,8 +17,7 @@ namespace Ssc.SscStream {
         public WriteStream() {
         }
 
-        public override void Assign() {
-            base.Assign();
+        public void Assign() {
 
             _buffer = ObjectFactory.CreateBuffer();
             _count = Ssci.StreamConfig.BufferSize - Ssci.StreamConfig.PacketOffset;
@@ -33,7 +32,7 @@ namespace Ssc.SscStream {
         }
 
         public void Dispose() {
-            Recycle();
+            Recycle(this);
         }
 
         public ByteFragment ToByteFragment() {
@@ -148,8 +147,7 @@ namespace Ssc.SscStream {
             _rightOffsetWrite += count;
         }
 
-        public override void Recycle() {
-            base.Recycle();
+        public void Recycle() {
             ObjectFactory.Recycle(_buffer);
         }
     }

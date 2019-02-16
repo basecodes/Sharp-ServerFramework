@@ -6,7 +6,7 @@ using Ssc.SscTemplate;
 using Sss.SssScripts.Lua;
 
 namespace Sss.SssComponent {
-    public class LuaPeerComponent : PoolAllocator<LuaPeerComponent>, ILuaComponent,IRecyclable,IAssignable{
+    public class LuaPeerComponent : PoolAllocator<LuaPeerComponent>, ILuaComponent,IMemoryable{
         public Table Instance { get; }
         private readonly LuaHelper _luaHelper;
 
@@ -23,6 +23,12 @@ namespace Sss.SssComponent {
             var list = new List<object> {Instance};
             list.AddRange(args);
             return _luaHelper.Call(Instance, methodName, list.ToArray()).ToObject<T>();
+        }
+
+        public void Assign() {
+        }
+
+        public void Recycle() {
         }
     }
 }
