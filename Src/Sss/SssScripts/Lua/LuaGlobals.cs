@@ -1,7 +1,6 @@
 ﻿using System;
 using MoonSharp.Interpreter;
 using Ssc.SscSerialization;
-using Sss.SssRpc;
 using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
@@ -13,7 +12,7 @@ namespace Sss.SssScripts.Lua {
         private static void GlobalType() {
             LuaHelper.RegisterType<LuaController>();
             LuaHelper.RegisterType<LuaPacket>();
-            LuaHelper.RegisterType<LuaWrapper<ILuaPacket>>();
+            LuaHelper.RegisterType<ClassWrapper<ILuaPacket>>();
 
             ClrToScript.RegisterUserDataToTable();
             ClrToScript.RegisterPeerComponentToTable();

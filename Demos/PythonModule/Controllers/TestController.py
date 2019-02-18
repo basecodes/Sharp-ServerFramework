@@ -18,6 +18,7 @@ class TestController(Controller):
 	def Test2(self,num,str,array,peer,callback):
 		print(num)
 		print(str)
+
 		for	item in array:
 			print(item)
 		return True
@@ -25,6 +26,7 @@ class TestController(Controller):
 	def Test3(self,num,str,array,packets,peer,callback):
 		print(num)
 		print(str)
+
 		for	item in array:
 			print(item)
 		for item in packets:

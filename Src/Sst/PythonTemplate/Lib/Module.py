@@ -3,44 +3,36 @@ import clr
 import sys
 clr.AddReference("Sss")
 
-from Sss.SssModule import PythonModule
+from Sss.SssScripts.Python import PythonProxy
 
-class Module(PythonModule):
+class Module:
 	def __init__(self):
-		PythonModule.SetPythonHelper(self,sys.PythonHelper)
-		self.__ServiceId = ""
-
-	@property
-	def ServiceId(self):
-		return self.__ServiceId
-
-	@ServiceId.setter
-	def ServiceId(self,value):
-		self.__ServiceId = value
+		self.IModule = PythonProxy.CreateModule(self,sys.PythonHelper)
+		self.ServiceId = ""
 
 	def Initialize(self,server,cacheManager,controllerComponentManager):
-		PythonModule.Initialize(self,server,cacheManager,controllerComponentManager)
+		pass
 	
 	def InitFinish(self,server,cacheManager,controllerComponentManager):
-		PythonModule.InitFinish(self,server,cacheManager,controllerComponentManager)
+		pass
 
 	def Finish(self,server,cacheManager,controllerComponentManager):
-		PythonModule.Finish(self,server,cacheManager,controllerComponentManager)
+		pass
 
 	def Dispose(self,cacheManager,controllerComponentManager):
-		PythonModule.Dispose(self,cacheManager,controllerComponentManager)
+		pass
 
 	def Accepted(self,peer,readStream,writeStream):
-		return PythonModule.Accepted(self,peer,readStream,writeStream)
+		return True
 
 	def Connected(self,peer,readStream):
-		PythonModule.Connected(self,peer,readStream)
+		pass
+
+	def Disconnected(self,peer):
+		pass
 
 	def AddController(self,generator):
-		return PythonModule.AddController(self,generator)
-
-	def SetObjectPool(self,interface,implement):
-		PythonModule.SetObjectPool(self,interface,implement)
+		return self.IModule.AddController(generator)
 
 	def AddPacket(self,interface,implement):
-		PythonModule.AddPacket(self,interface,implement)
+		self.IModule.AddPacket(interface,implement)

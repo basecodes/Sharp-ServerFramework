@@ -1,9 +1,9 @@
 ﻿
-from ISerializablePacket import ISerializablePacket
+from SerializablePacket import SerializablePacket
 
-class ITestPacket(ISerializablePacket):
+class ITestPacket(SerializablePacket):
 	def __init__(self):
-		ISerializablePacket.__init__(self)
+		SerializablePacket.__init__(self,"ITestPacket")
 		self.Name = ""
 		self.Password = ""
 

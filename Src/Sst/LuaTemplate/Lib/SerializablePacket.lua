@@ -3,7 +3,7 @@
 local SerializablePacket = classes.class()
 
 function SerializablePacket:init(child,interface)
-  self.ISerializablePacket = LuaProxy.New(interface,child,LuaHelper)
+  self.ISerializablePacket = LuaProxy.CreatePacket(interface,child,LuaHelper)
 
   self.char = TypeCode.Char
   self.bool = TypeCode.Boolean
@@ -20,15 +20,26 @@ function SerializablePacket:init(child,interface)
   self.string = TypeCode.String
 
   self.Type = FieldType.PacketType
-  self.Interface = interface
 end
 
 function SerializablePacket:GetObject(interface)
-  return LuaProxy.GetObject(interface)
+  return self.ISerializablePacket.GetObject(interface)
 end
 
 function SerializablePacket:Recycle(interface,packet)
-  LuaProxy.Recycle(interface,packet.ISerializablePacket)
+  self.ISerializablePacket.Recycle(interface,packet.ISerializablePacket)
+end
+
+function SerializablePacket:FromBinaryReader( reader )
+end
+
+function SerializablePacket:ToBinaryWriter( writer )
+end
+
+function SerializablePacket:Assign()
+end
+
+function SerializablePacket:Recycle()
 end
 
 return SerializablePacket

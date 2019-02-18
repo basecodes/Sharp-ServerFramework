@@ -3,7 +3,7 @@
 local ControllerComponent = classes.class()
 
 function ControllerComponent:init(child)
-	self.IControllerComponent = LuaProxy.NewRpcComponent(child,LuaHelper)
+	self.IControllerComponent = LuaProxy.CreateControllerComponent(child,LuaHelper)
 end
 
 return RpcComponent

@@ -3,9 +3,6 @@
 local Factory = Classes.class() 
 
 function Factory:init()
-	self.NullType = FieldType.NullType
-	self.BaseType = FieldType.BaseType
-	self.PacketType = FieldType.PacketType
 	self.ArrayBase = FieldType.ArrayBase
 	self.ArrayPacket = FieldType.ArrayPacket
 	self.DictKBVB = FieldType.DictKBVB
@@ -15,7 +12,7 @@ function Factory:init()
 end
 
 function Factory:Create(type)
-	return {Type = type,Value = nil}
+	return {Type = type}
 end
 
 return Factory

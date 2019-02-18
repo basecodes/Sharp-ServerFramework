@@ -8,7 +8,6 @@ using Ssc.SscFactory;
 using Ssc.SscSerialization;
 using Ssm.SsmComponent;
 using Sss.SssComponent;
-using Sss.SssRpc;
 using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
@@ -19,7 +18,7 @@ namespace Sss.SssScripts.Lua {
                 DataType.Table, typeof(IPeerComponent),
                 v => {
                     var table = v.Table;
-                    return table.Get(nameof(IPeerComponent)).ToObject<LuaWrapper<LuaPeerComponent>>().Value;
+                    return table.Get(nameof(IPeerComponent)).ToObject<ClassWrapper<LuaPeerComponent>>().Value;
                 }
             );
         }
@@ -80,7 +79,7 @@ namespace Sss.SssScripts.Lua {
                 DataType.Table, typeof(IControllerComponent),
                 v => {
                     var table = v.Table;
-                    return table.Get(nameof(IControllerComponent)).ToObject<LuaWrapper<LuaControllerComponent>>().Value;
+                    return table.Get(nameof(IControllerComponent)).ToObject<ClassWrapper<LuaControllerComponent>>().Value;
                 }
             );
         }
@@ -140,7 +139,7 @@ namespace Sss.SssScripts.Lua {
                         }
 
                         if (typeof(K) == typeof(ISerializablePacket)) {
-                            key = item.Key.Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value as ISerializablePacket;
+                            key = item.Key.Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value as ISerializablePacket;
                         }
 
                         object value = null;
@@ -149,7 +148,7 @@ namespace Sss.SssScripts.Lua {
                         }
 
                         if (typeof(V) == typeof(ISerializablePacket)) {
-                            value = item.Value.Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value as ISerializablePacket;
+                            value = item.Value.Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value as ISerializablePacket;
                         }
 
                         if (key == null || value == null) {
@@ -185,7 +184,7 @@ namespace Sss.SssScripts.Lua {
                     if (typeof(T) == typeof(ISerializablePacket)) {
                         var values = new ISerializablePacket[table.Length];
                         for (var i = 0; i < table.Length; i++) {
-                            values[i] = table.Get(i + 1).Table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value;
+                            values[i] = table.Get(i + 1).Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value;
                         }
                         return values;
                     }
@@ -201,7 +200,7 @@ namespace Sss.SssScripts.Lua {
                 DataType.Table, typeof(ISerializablePacket),
                 v => {
                     var table = v.Table;
-                    return table.Get(nameof(ISerializablePacket))?.ToObject<LuaWrapper<ILuaPacket>>().Value;
+                    return table.Get(nameof(ISerializablePacket))?.ToObject<ClassWrapper<ILuaPacket>>().Value;
                 }
             );
         }

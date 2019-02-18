@@ -3,7 +3,7 @@
 local PeerComponent = classes.class()
 
 function PeerComponent:init(child)
-	self.IPeerComponent = LuaProxy.NewPeerComponent(child,LuaHelper)
+	self.IPeerComponent = LuaProxy.CreatePeerComponent(child,LuaHelper)
 end
 
 return PeerComponent

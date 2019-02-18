@@ -7,6 +7,7 @@ using Ssf.SsfConfiguration;
 using Ssf.SsfManager;
 using Ssf.SsfSecurity;
 using Sss.SssComponent;
+using Sss.SssScripts;
 using Sss.SssScripts.Lua;
 
 namespace Ssf {
@@ -55,8 +56,8 @@ namespace Ssf {
             LuaHelper.RegisterType<IResponseMessage>();
             LuaHelper.RegisterType<ISerializable>();
             LuaHelper.RegisterType<IDeserializable>();
-            LuaHelper.RegisterType<LuaWrapper<LuaPeerComponent>>();
-            LuaHelper.RegisterType<LuaWrapper<LuaControllerComponent>>();
+            LuaHelper.RegisterType<ClassWrapper<LuaPeerComponent>>();
+            LuaHelper.RegisterType<ClassWrapper<LuaControllerComponent>>();
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Sss.SssScripts.Python {
             _scriptEngine.SetSearchPaths(paths);
         }
 
-        public dynamic Create(PythonType type, params object[] args) {
+        public dynamic Create(dynamic type, params object[] args) {
             try {
                 return _scriptEngine.Operations.CreateInstance(type, args);
             } catch (Exception e) {
@@ -65,7 +65,7 @@ namespace Sss.SssScripts.Python {
         public static PythonType GetPythonType(dynamic obj) {
             return DynamicHelpers.GetPythonType(obj);
         }
-
+        
 
         public object Call(object obj, params object[] parameters) {
             return _scriptEngine.Operations.Invoke(obj, parameters);
@@ -98,8 +98,12 @@ namespace Sss.SssScripts.Python {
             return startup.Main();
         }
 
-        public IList<string> GetFields(dynamic obj) {
+        public IList<string> GetMembers(dynamic obj) {
             return _scriptEngine.Operations.GetMemberNames(obj);
+        }
+
+        public dynamic GetMember(dynamic obj,string name) {
+            return _scriptEngine.Operations.GetMember(obj,name);
         }
 
         public void Execute(string fileName) {
@@ -110,7 +114,7 @@ namespace Sss.SssScripts.Python {
             compilerOptions.ModuleName = "__main__";
             compilerOptions.Module |= ModuleOptions.Initialize;
             var compiled = source.Compile(compilerOptions);
-
+            
             try {
                 compiled.Execute(_scriptScope);
             } catch (Exception e) {

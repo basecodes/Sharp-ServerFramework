@@ -18,7 +18,7 @@
     <None Update="Lib\Module.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Lib\ISerializablePacket.py">
+    <None Update="Lib\SerializablePacket.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

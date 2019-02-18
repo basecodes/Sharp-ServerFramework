@@ -70,7 +70,9 @@ namespace Ssc.SscSerialization {
                 var length = _readStream.ShiftRight<ushort>();
                 var typeCode = (TypeCode) _readStream.ShiftRight<byte>();
                 var array = typeCode.GetBaseType().MakeArray(length);
-                for (var i = 0; i < length; ++i) array.SetValue(Read(), i);
+                for (var i = 0; i < length; ++i) {
+                    array.SetValue(Read(), i);
+                }
                 return array;
             }
 

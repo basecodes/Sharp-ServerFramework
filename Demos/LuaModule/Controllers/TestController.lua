@@ -23,9 +23,10 @@ function TestController:Test2(num,str,array,peer,callback)
     print(num)
 	print(str)
 
-	for i = 1,#array do
-		print(array[i])
+	for k,v in pairs(array) do
+		print(k .. " " .. tostring(v))
 	end
+
 	return true
 end
 
@@ -33,12 +34,12 @@ function TestController:Test3(num,str,array,packets,peer,callback)
     print(num)
 	print(str)
 
-	for i = 1,#array do
-		print(array[i])
+	for item in pairs(array) do
+		print(item)
 	end
 
-	for i = 1,#packets do
-		print(packets[i]:ToString())
+	for k,v in pairs(packets) do
+		print(k .. " " .. tostring(v))
 	end
 
 	self:Invoke("User-4AC85EE0-2616-4EB3-AD50-DA7FB588870C",peer,nil,num .. str,packets[1])

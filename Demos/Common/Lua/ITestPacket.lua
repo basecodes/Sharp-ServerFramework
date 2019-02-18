@@ -6,6 +6,12 @@ function ITestPacket:init(child)
 	self.super:init(child,"ITestPacket")
 	self.Name = ""
 	self.Password = ""
+
+	local mt = {}
+	mt.__tostring = function(packet)
+		return packet.Name .. " " .. packet.Password
+	end
+	setmetatable(self,mt)
 end
 
 function ITestPacket:FromBinaryReader( reader )
@@ -14,10 +20,6 @@ end
 
 function ITestPacket:ToBinaryWriter( writer )
 
-end
-
-function ITestPacket:ToString()
-	return self.Name .. " " .. self.Password
 end
 
 return ITestPacket

@@ -3,7 +3,7 @@
 local Module = Classes.class()
 
 function Module:init(child)
-	self.IModule = LuaProxy:New(child,LuaHelper)
+	self.IModule = LuaProxy:CreateModule(child,LuaHelper)
 
 	self.ModuleName = ""
 	self.ServiceId = ""
@@ -37,6 +37,7 @@ end
 -- abstract
 function Module:Accepted(peer,readStream,writeStream)
 	-- Body
+	return true
 end
 
 -- abstract

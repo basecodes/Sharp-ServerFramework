@@ -11,10 +11,13 @@ using Ssm.Ssm;
 using Ssm.SsmManager;
 using Ssm.SsmModule;
 using Ssm.SsmService;
+using Sss.SssScripts;
 using Sss.SssScripts.Python;
+using Sss.SssSerialization;
+using Sss.SssSerialization.Python;
 
 namespace Sss.SssModule {
-    public abstract class PythonModule : IModule {
+    public class PythonModule : IModule {
         private static readonly Logger Logger = LogManager.GetLogger<PythonModule>(LogType.Middle);
 
         private ICacheManager _cacheManager;
@@ -23,18 +26,18 @@ namespace Sss.SssModule {
         public List<string> RpcMethodIds { get; }
         public List<string> RpcPacketTypes {get;}
 
-        public abstract string ServiceId { get; }
+        public string ServiceId => _instance.ServiceId;
         public string ModuleName => PythonHelper.GetPythonTypeName(this);
 
         private IServer _server;
         private PythonHelper _pythonHelper;
-        public PythonModule() {
+        private dynamic _instance;
+
+        public PythonModule(dynamic instance,PythonHelper pythonHelper) {
+            _instance = instance ?? throw new ArgumentNullException(nameof(instance));
+            _pythonHelper = pythonHelper ?? throw new ArgumentNullException(nameof(pythonHelper));
             RpcMethodIds = new List<string>();
             RpcPacketTypes = new List<string>();
-        }
-
-        protected void SetPythonHelper(PythonHelper pythonHelper) {
-            _pythonHelper = pythonHelper ?? throw new ArgumentNullException(nameof(pythonHelper));
         }
 
         public virtual void Initialize(IServer server, ICacheManager cacheManager,
@@ -42,14 +45,17 @@ namespace Sss.SssModule {
             _server = server ?? throw new ArgumentNullException(nameof(server));
             _controllerComponentManager = controllerComponentManager ?? throw new ArgumentNullException(nameof(controllerComponentManager));
             _cacheManager = cacheManager ?? throw new ArgumentNullException(nameof(cacheManager));
+            _instance.Initialize(server, cacheManager, controllerComponentManager);
         }
 
         public virtual void InitFinish(IServer server, ICacheManager cacheManager,
             IControllerComponentManager controllerComponentManager) {
-            Console.WriteLine();
+            _instance.InitFinish(server, cacheManager, controllerComponentManager);
         }
 
         public virtual void Dispose(ICacheManager cacheManager, IControllerComponentManager controllerComponentManager) {
+            _instance.Dispose(cacheManager, controllerComponentManager);
+
             foreach (var item in RpcMethodIds) {
                 RpcResponseManager.RemoveRpcMethod(item);
             }
@@ -65,16 +71,19 @@ namespace Sss.SssModule {
         }
 
         public virtual void Finish(IServer server, ICacheManager cacheManager, IControllerComponentManager controllerComponentManager) {
+            _instance.Finish(server, cacheManager, controllerComponentManager);
         }
 
         public virtual bool Accepted(IUser peer, IReadStream readStream, IWriteStream writeStream) {
-            return true;
+            return _instance.Accepted(peer, readStream, writeStream);
         }
 
         public virtual void Connected(IUser peer, IReadStream readStream) {
+            _instance.Connected(peer, readStream);
         }
 
         public virtual void Disconnected(IUser peer) {
+            _instance.Disconnected(peer);
         }
 
         public void AddController(Func<dynamic> generator){
@@ -84,39 +93,35 @@ namespace Sss.SssModule {
 
             var instance = generator.Invoke();
             if (instance == null) {
-                throw new ArgumentException(nameof(generator));
+                throw new ArgumentNullException(nameof(generator));
             }
             var ids = instance.MethodIds as string;
             var splist = ids.Split(";");
             RpcMethodIds.AddRange(splist);
         }
-
-        protected void SetObjectPool(Type type, dynamic implement){
-            if (type == null) {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            PoolAllocator<IPythonFactory>.SetPool(arguments => implement());
-        }
         
-        public void AddPacket(PythonType interfaceType,dynamic implement){
-            if (interfaceType == null) {
-                throw new ArgumentNullException(nameof(interfaceType));
+        public void AddPacket(string interfaceName,dynamic implement){
+            if (string.IsNullOrEmpty(interfaceName)) {
+                throw new ArgumentNullException(nameof(interfaceName));
             }
 
             if (implement == null) {
                 throw new ArgumentNullException(nameof(implement));
             }
 
-            var interfaceName = PythonHelper.GetPythonTypeName(interfaceType);
             if (PacketManager.Cantains(interfaceName)) {
                 Logger.Warn($"已经缓存{interfaceName}");
                 return;
             }
 
-            PoolAllocator<ISerializablePacket>.SetPool(arguments => implement());
-            PacketManager.Register(interfaceName,typeof(IPythonObject), 
-                args => PoolAllocator<ISerializablePacket>.GetObject(args));
+            ScriptPoolAllocator<IPythonPacket>.SetPool(interfaceName,arguments => {
+                var instance = implement();
+                var wrapper = instance.ISerializablePacket as ClassWrapper<IPythonPacket>;
+                return wrapper.Value;
+            });
+
+            PacketManager.Register(interfaceName,typeof(IPythonPacket), 
+                args => ScriptPoolAllocator<IPythonPacket>.GetObject(interfaceName,args));
             RpcPacketTypes.Add(interfaceName);
         }
 

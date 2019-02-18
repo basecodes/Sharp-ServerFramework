@@ -9,11 +9,13 @@ using Ssc.SscSerialization;
 using Sss.SssSerialization.Lua;
 
 namespace Sss.SssScripts.Lua {
-    internal class LuaParser {
+    internal sealed class LuaParser {
         private static readonly Logger Logger = LogManager.GetLogger<LuaParser>(LogType.Middle);
 
-        public static object[] Parse(object[] args) {
-            if (args == null) return new object[0];
+        public static object[] Parse(object[] args,Script script) {
+            if (args == null) {
+                return new object[0];
+            }
 
             var objects = new object[args.Length];
             for (var i = 0; i < args.Length; i++) {
@@ -23,17 +25,17 @@ namespace Sss.SssScripts.Lua {
                 }
 
                 if (args[i] is Array array) {
-                    objects[i] = ParseArray(array);
+                    objects[i] = ParseArray(array,script);
                     continue;
                 }
 
                 if (args[i] is LuaPacket luaPacket) {
-                    objects[i] = ParsePacket(luaPacket);
+                    objects[i] = ParsePacket(luaPacket,script);
                     continue;
                 }
 
                 if (args[i] is IDictionary dict) {
-                    objects[i] = ParseDictionary(dict);
+                    objects[i] = ParseDictionary(dict,script);
                     continue;
                 }
 
@@ -43,57 +45,60 @@ namespace Sss.SssScripts.Lua {
             return objects;
         }
 
-        private static object ParsePacket(LuaPacket luaPacket) {
-            if (luaPacket == null) return null;
+        private static object ParsePacket(LuaPacket luaPacket,Script script) {
+            if (luaPacket == null) {
+                return null;
+            }
+
             return luaPacket.Instance;
         }
 
-        private static object ParseArray(Array array) {
-            if (array == null) return null;
-
-            var elementType = array.GetType().GetElementType();
-            if (typeof(ILuaPacket) == elementType) {
-                var lsps = new Table[array.Length];
-                for (var i = 0; i < lsps.Length; i++)
-                    if (array.GetValue(i) is LuaPacket tmp)
-                        lsps[i] = tmp.Instance;
-
-                return lsps;
+        private static object ParseArray(Array array,Script script) {
+            if (array == null) {
+                return null;
             }
 
-            if (typeof(IConvertible).IsAssignableFrom(elementType)) return array;
+            var table = DynValue.NewTable(script).Table;
+            var type = FieldType.ArrayBase;
+            for (var i = 0; i < array.Length; i++) {
+                var value = array.GetValue(i);
+                if (value is LuaPacket packet) {
+                    table.Append(DynValue.NewTable(packet.Instance));
+                    type = FieldType.ArrayPacket;
+                } else {
+                    table.Append(DynValue.FromObject(script,value));
+                }
+            }
 
-            return null;
+            table["Type"] = type;
+            return table;
         }
 
-        private static object ParseDictionary(IDictionary dicts) {
-            if (dicts == null) return null;
-            var types = dicts.GetType().GetGenericArguments();
-
-            var count = types.Count(t => typeof(IConvertible).IsAssignableFrom(t) || typeof(ISerializablePacket).IsAssignableFrom(t));
-            if (count == types.Length) {
-                var dictType = typeof(Dictionary<,>).MakeGenericType(
-                    typeof(ISerializablePacket).IsAssignableFrom(types[0]) ? typeof(Table) : types[0],
-                    typeof(ISerializablePacket).IsAssignableFrom(types[1]) ? typeof(Table) : types[1]);
-
-                var dict = ObjectFactory.GetActivator<IDictionary>(dictType.GetConstructors().First())();
-
-                foreach (DictionaryEntry value in dicts) {
-                    var key = value.Key;
-                    if (value.Key is ISerializablePacket)
-                        if (value.Key is LuaPacket tmp)
-                            key = tmp.Instance;
-                    var vle = value.Value;
-                    if (value.Value is ISerializablePacket)
-                        if (value.Value is LuaPacket tmp)
-                            vle = tmp.Instance;
-                    dict.Add(key, vle);
-                }
-
-                return dict;
+        private static object ParseDictionary(IDictionary dicts,Script script) {
+            if (dicts == null) {
+                return null;
             }
 
-            return null;
+            var table = DynValue.NewTable(script).Table;
+            var offset = FieldType.DictKBVB;
+
+            foreach (DictionaryEntry item in dicts) {
+                var key = item.Key;
+                if (item.Key is LuaPacket packetKey) {
+                    key = packetKey.Instance;
+                    offset = FieldType.DictKBVB + 2;
+                }
+
+                var value = item.Value;
+                if (item.Value is LuaPacket packetValue) {
+                    value = packetValue.Instance;
+                    offset = FieldType.DictKBVB + 1;
+                }
+                table[key] = value;
+            }
+
+            table["Type"] = offset;
+            return table;
         }
     }
 }

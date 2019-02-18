@@ -12,6 +12,7 @@ using Ssm.Ssm;
 using Ssm.SsmManager;
 using Ssm.SsmModule;
 using Ssm.SsmService;
+using Sss.SssScripts;
 using Sss.SssScripts.Lua;
 using Sss.SssSerialization;
 using Sss.SssSerialization.Lua;
@@ -49,8 +50,7 @@ namespace Sss.SssModule {
         }
 
         public virtual bool Accepted(IUser peer, IReadStream readStream, IWriteStream writeStream) {
-            _luaHelper.Call(_table, nameof(Accepted), _table, peer,readStream,writeStream);
-            return true;
+            return _luaHelper.Call(_table, nameof(Accepted), _table, peer, readStream, writeStream).ToObject<bool>();
         }
 
         public virtual void Connected(IUser peer, IReadStream readStream) {
@@ -131,17 +131,17 @@ namespace Sss.SssModule {
                 return;
             }
 
-            LuaPoolAllocator<ILuaPacket>.CreateObjectPool(interfaceName, args => {
+            ScriptPoolAllocator<ILuaPacket>.SetPool(interfaceName, args => {
                 var dynValue = newTable.Call();
                 if (Equals(dynValue, DynValue.Nil)) {
                     throw new DynamicCreateObjectException($"动态创建{interfaceName}表失败!");
                 }
                 var table = dynValue.Table;
-                return table.Get(nameof(ISerializablePacket)).ToObject<LuaWrapper<ILuaPacket>>().Value;
+                return table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value;
             });
 
             PacketManager.Register(interfaceName, typeof(ILuaPacket),
-                args => LuaPoolAllocator<ILuaPacket>.GetObject(interfaceName));
+                args => ScriptPoolAllocator<ILuaPacket>.GetObject(interfaceName,args));
 
             RpcPacketTypes.Add(interfaceName);
         }

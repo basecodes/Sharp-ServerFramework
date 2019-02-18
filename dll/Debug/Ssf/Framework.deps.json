@@ -1265,7 +1265,7 @@
     "Microsoft.Win32.Registry/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-nt8HW2YtCF3xGObHXtCAn5tzuZpjy5YMPftzyrjF6Ek5RyLUFU4cSw4yGWV2+dyftDXjDpytdLPrgSttC9ZePA==",
+      "sha512": "sha512-vduxuHEqRgRrTE8wYG8Wxj/+6wwzddOmZzjKZx6rFMc/91aUBxI5etAFYxesoNaIja5NpgSTcnk6cN8BeYXf9A==",
       "path": "microsoft.win32.registry/4.5.0",
       "hashPath": "microsoft.win32.registry.4.5.0.nupkg.sha512"
     },
@@ -1433,7 +1433,7 @@
     "System.Collections.Immutable/1.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RGxi2aQoXgZ5ge0zxrKqI4PU9LrYYoLC+cnEnWXKsSduCOUhE1GEAAoTexUVT8RZOILQyy1B27HC8Xw/XLGzdQ==",
+      "sha512": "sha512-T5XGQlcHhEO75Qx38GGCUDPdk4n/7yrRmTgy4yczzJV8alPHaxPU55TBC2UFrkQ42bu34sZPfK0dU+nWZUOEJA==",
       "path": "system.collections.immutable/1.5.0",
       "hashPath": "system.collections.immutable.1.5.0.nupkg.sha512"
     },
@@ -1461,7 +1461,7 @@
     "System.Diagnostics.FileVersionInfo/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6WVi7gArhxRiC+3qI5V2mFe1gHENj/F7xT5PQiy/lI/RsxXeivrt09WF0huwSQK2ubnmyyRFeA9z3w743/w32A==",
+      "sha512": "sha512-omCF64wzQ3Q2CeIqkD6lmmxeMZtGHUmzgFMPjfVaOsyqpR66p/JaZzManMw1s33osoAb5gqpncsjie67+yUPHQ==",
       "path": "system.diagnostics.fileversioninfo/4.3.0",
       "hashPath": "system.diagnostics.fileversioninfo.4.3.0.nupkg.sha512"
     },
@@ -1594,7 +1594,7 @@
     "System.Reflection.Metadata/1.6.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-sARURAx/ZV3f3lL/40TG9y2Wqk60DXUlvzowM5oYeHlcpuEMIxoKnDBhNwBzwRs3i+vWUwIbU7Kk/+mG+hzckA==",
+      "sha512": "sha512-I4aWCii7N1bmn43vviRfJQYW6UAco1G/CcjJouvgGdb/sr2BRTSnddhaPMg2oxu9VHFn8T1z3dTLq0pna8zmtA==",
       "path": "system.reflection.metadata/1.6.0",
       "hashPath": "system.reflection.metadata.1.6.0.nupkg.sha512"
     },
@@ -1664,7 +1664,7 @@
     "System.Security.AccessControl/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aVjTe36YkO8FzfNhMLoPEzv3gF9rphoW9ngFhG/MH4zzEPLx07sNrgCLwMP4Wx2leI6qarMrGv21OwQXYUKLmw==",
+      "sha512": "sha512-6RQtcT+TyDgLUFsAnmmdfRRGdLYKxSZGkSPOd052tvYFxOTMaQb6ANlwhGqZtNO52PosaCoXu7uatFneujAxmA==",
       "path": "system.security.accesscontrol/4.5.0",
       "hashPath": "system.security.accesscontrol.4.5.0.nupkg.sha512"
     },
@@ -1727,14 +1727,14 @@
     "System.Security.Permissions/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-O+e9qamSTJ4YOJCpnLgsf9FTGfsxJv2On1OdYkhmd/XA5AYRvUatkz7Rp3dS9XR7rhVuklnjST1dRoMK7N4cGw==",
+      "sha512": "sha512-vDQ7q30Soe0a1cPhvxn+7IFmMeTG5IP+hTQrnKQDjTNpD2epqwbZSzMM2Git5TXBr4Kwwhc/0SEtJY0qPoiegA==",
       "path": "system.security.permissions/4.5.0",
       "hashPath": "system.security.permissions.4.5.0.nupkg.sha512"
     },
     "System.Security.Principal.Windows/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aEFuhlWINOa6KnKeFqQNzmtOeyCCyIJY4CS5DI9keDNXgVzqVsK46axp8Rpkx46S+QlNTqGgdx/O/mzrC1GA5A==",
+      "sha512": "sha512-hs2zF4tOQ3V4iQttVnLrnR/i8AOrrAgu2Gmp4/jNaE/+5hiZWDj20FK/m/OW3Itdi9XDvqf55WzHkiWYtOSUNg==",
       "path": "system.security.principal.windows/4.5.0",
       "hashPath": "system.security.principal.windows.4.5.0.nupkg.sha512"
     },
@@ -1804,7 +1804,7 @@
     "System.ValueTuple/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xZtSZNEHGa+tGsKuP4sh257vxJ/yemShz4EusmomkynMzuEDDjVaErBNewpzEF6swUgbcrSQAX3ELsEp1zCOwA==",
+      "sha512": "sha512-+gDrtQRdEsUSdPZEEcVRmBvs6xJmqGBqRzEGMQm5XqHxWTkZe/PSuomdth5ZPcOb/Oh2kIu6NChoI1JQk649jg==",
       "path": "system.valuetuple/4.5.0",
       "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
     },

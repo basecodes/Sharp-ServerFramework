@@ -65,13 +65,9 @@ namespace Ssf.SsfManager {
                 throw new Exception($"{fileName}库返回值异常，返回值为null!");
             }
 
-            if (!typeof(IModule).IsAssignableFrom(PythonHelper.GetPythonType(module))) {
-                throw new Exception($"模块类型非{nameof(IModule)}类型或者子类型！");
-            }
-
             var type = PythonHelper.GetPythonTypeName(module);
 
-            AddModule(type, module);
+            AddModule(type, pythonHelper.GetMember(module,nameof(IModule)));
         }
 
         public void AddModuleFromLuaFile(string fileName, string entry, string libPath = "./?;./?.lua;./Lua/?;./Lua/?.lua") {

@@ -1,41 +1,52 @@
 ﻿using Ssc;
 using Ssc.Ssc;
-using Ssc.SscRpc;
+using Ssc.SscFactory;
+using Sss.SssModule;
+using Sss.SssSerialization.Python;
 using System;
+using System.Linq;
 
 namespace Sss.SssScripts.Python {
     public class PythonProxy {
 
-        public static void Invoke(string methodId, IPeer peer, dynamic func, dynamic[] objects) {
-            if (string.IsNullOrEmpty(methodId)) {
-                throw new ArgumentException(nameof(methodId));
+        public static ClassWrapper<IPythonPacket> CreatePacket(string interfaceName, dynamic instance, PythonHelper pythonHelper) {
+            if (string.IsNullOrEmpty(interfaceName)) {
+                throw new ArgumentNullException(nameof(interfaceName));
             }
 
-            if (peer == null) {
-                throw new ArgumentNullException(nameof(peer));
+            if (instance == null) {
+                throw new ArgumentNullException(nameof(instance));
             }
 
-            ResponseCallback responseCallback = (rm, sd) => {
-                func?.Invoke(rm, sd);
-            };
-            Ssci.Invoke(methodId, peer, responseCallback, objects);
+            if (pythonHelper == null) {
+                throw new ArgumentNullException(nameof(pythonHelper));
+            }
+
+            var luaPacket = ObjectFactory.GetActivator<IPythonPacket>(
+                typeof(PythonPacket).GetConstructors().First())(interfaceName, instance, pythonHelper);
+            return new ClassWrapper<IPythonPacket>(luaPacket);
         }
 
-        public static string Register(string id, dynamic func,PythonHelper pythonHelper) {
-            if (string.IsNullOrEmpty(id)) {
-                throw new ArgumentException(nameof(id));
+        public static PythonController CreateControler(dynamic instance) {
+            if (instance == null) {
+                throw new ArgumentNullException(nameof(instance));
             }
 
-            if (func == null) {
-                throw new ArgumentNullException(nameof(func));
+            return ObjectFactory.GetActivator<PythonController>(
+                typeof(PythonController).GetConstructors().First())(instance);
+        }
+
+        public static PythonModule CreateModule(dynamic instance, PythonHelper pythonHelper) {
+            if (instance == null) {
+                throw new ArgumentNullException(nameof(instance));
             }
 
-            object LateBoundMethod(params object[] args) {
-                return pythonHelper.Call(func, args);
+            if (pythonHelper == null) {
+                throw new ArgumentNullException(nameof(pythonHelper));
             }
 
-            RpcRegister.RegisterMethod(id, LateBoundMethod);
-            return id;
+            return ObjectFactory.GetActivator<PythonModule>(
+                typeof(PythonModule).GetConstructors().First())(instance, pythonHelper);
         }
     }
 }

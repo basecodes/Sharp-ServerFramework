@@ -2,6 +2,8 @@
 using Ssc.SscSerialization;
 using Sss.SssComponent;
 using Sss.SssSerialization.Lua;
+using System;
+using System.Collections;
 
 namespace Sss.SssScripts.Lua {
     internal static class ClrToScript {

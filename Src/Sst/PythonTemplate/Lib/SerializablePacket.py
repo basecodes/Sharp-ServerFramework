@@ -1,12 +1,17 @@
 ﻿import clr
-clr.AddReference("Ssc")
+import sys
+
+clr.AddReference("Sss")
 clr.AddReference("System.Runtime")
 
-from Ssc.SscSerialization import ISerializablePacket as PythonISerializablePacket
 from System import TypeCode
+from Sss.SssSerialization.Python import PythonPacket
+from Sss.SssScripts.Python import PythonProxy
 
-class ISerializablePacket(PythonISerializablePacket):
-	def __init__(self):
+class SerializablePacket:
+	def __init__(self,interface):
+		self.ISerializablePacket = PythonProxy.CreatePacket(interface,self,sys.PythonHelper)
+
 		self.char = TypeCode.Char
 		self.bool = TypeCode.Boolean
 		self.sbyte = TypeCode.SByte
@@ -21,8 +26,14 @@ class ISerializablePacket(PythonISerializablePacket):
 		self.double = TypeCode.Double
 		self.string = TypeCode.String
 
+	def Assign(self):
+		pass
+
+	def Recycle(self):
+		pass
+
 	def ToBinaryWriter(self,writer):
-		PythonISerializablePacket.ToBinaryWriter(self,writer)
+		pass
 
 	def FromBinaryReader(self,reader):
-		PythonISerializablePacket.FromBinaryReader(self,reader)
+		pass
