@@ -2,9 +2,9 @@
 using System.Reflection;
 
 namespace Sss.SssScripts.Lua {
-    public class LuaLoader {
+    public class LuaUtils {
 
-        static LuaLoader(){
+        static LuaUtils(){
             LuaHelper.RegisterType<Assembly>();
         }
 
@@ -14,6 +14,10 @@ namespace Sss.SssScripts.Lua {
 
         public static Type GetType(Assembly assembly,string name) {
             return assembly.GetType(name);
+        }
+
+        public static Type GetType(TypeCode typeCode) {
+            return typeCode.GetType();
         }
     }
 }

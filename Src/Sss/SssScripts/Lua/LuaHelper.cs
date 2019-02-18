@@ -17,7 +17,7 @@ namespace Sss.SssScripts.Lua {
             
             UserStatic<TypeCode>();
             UserStatic<LuaProxy>();
-            UserStatic<LuaLoader>();
+            UserStatic<LuaUtils>();
             UserStatic<FieldType>();
         }
 

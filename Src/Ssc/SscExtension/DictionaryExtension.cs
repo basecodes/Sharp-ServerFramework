@@ -6,7 +6,7 @@ using Ssc.SscFactory;
 
 namespace Ssc.SscExtension {
     public static class DictionaryExtension {
-        public static IDictionary Make(Type keyType, Type valueType) {
+        public static IDictionary MakeDictionary(Type keyType, Type valueType) {
             var dictType = typeof(Dictionary<,>);
             var makeme = dictType.MakeGenericType(keyType, valueType);
             return ObjectFactory.GetActivator<IDictionary>(makeme.GetConstructors().First())();

@@ -9,13 +9,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Lua\ITestController.lua">
+    <None Update="Lua\ITestResponse.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Lua\ITestPacket.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Python\ITestController.py">
+    <None Update="Python\ITestResponse.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Python\ITestPacket.py">

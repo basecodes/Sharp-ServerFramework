@@ -8,6 +8,8 @@ using Sss.SssSerialization.Python;
 using System;
 using System.Linq;
 using System.Collections;
+using Ssc.SscSerialization;
+using Ssc.SscExtension;
 
 namespace Sss.SssScripts.Python {
     public sealed class PythonController : Controller {
@@ -38,29 +40,33 @@ namespace Sss.SssScripts.Python {
             for (var i = 0; i < objects.Length; i++) {
                 if (objects[i] is Array array) {
                     var type = objects[i].GetType().GetElementType();
-                    if (typeof(IPythonObject).IsAssignableFrom(type)) {
+                    if (!typeof(IConvertible).IsAssignableFrom(type)) {
+                        var packets = typeof(ISerializablePacket).MakeArray(array.Length);
                         for (var j = 0; j < array.Length; j++) {
-                            array.SetValue(j, (array.GetValue(j) as dynamic).ISerializablePacket.Value);
+                            packets.SetValue((array.GetValue(j) as dynamic).ISerializablePacket.Value,j);
                         }
+                        objects[i] = packets;
                     }
+                    continue;
                 }
 
                 if (objects[i] is IDictionary dict) {
-                    var arguments = objects[i].GetGenericArguments();
-                    if (typeof(IPythonObject).IsAssignableFrom(arguments[0])) {
-                        foreach (var item in dict.Keys) {
-                            var value = dict[item];
+                    var arguments = dict.GetType().GetGenericArguments();
+                    var newDict = DictionaryExtension.MakeDictionary(arguments[0], arguments[1]);
+                    foreach (var item in dict.Keys) {
+                        var value = dict[item];
+                        object key = null;
+                        if (!typeof(IConvertible).IsAssignableFrom(arguments[0])) {
                             dict.Remove(item);
-                            dict[(item as dynamic).ISerializablePacket.Value] = value;
+                            key = (item as dynamic).ISerializablePacket.Value;
                         }
-                    }
 
-                    if (typeof(IPythonObject).IsAssignableFrom(arguments[1])) {
-                        foreach (var item in dict.Keys) {
-                            var value = dict[item];
-                            dict[item] = (value as dynamic).ISerializablePacket.Value;
+                        if (!typeof(IConvertible).IsAssignableFrom(arguments[1])) {
+                            value = (value as dynamic).ISerializablePacket.Value;
                         }
+                        newDict[key] = value;
                     }
+                    continue;
                 }
 
                 if (!(objects[i] is IConvertible)) {

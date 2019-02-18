@@ -86,7 +86,9 @@ namespace Ssc.SscSerialization {
                 _writeStream.ShiftRight((ushort) packets.Length);
                 _writeStream.ShiftRight(typeof(T).Name);
 
-                for (var i = 0; i < packets.Length; i++) WritePacket(packets[i]);
+                for (var i = 0; i < packets.Length; i++) {
+                    WritePacket(packets[i]);
+                }
             } else {
                 _writeStream.ShiftRight(false);
             }
@@ -98,7 +100,9 @@ namespace Ssc.SscSerialization {
                 _writeStream.ShiftRight((ushort) packets.Length);
                 _writeStream.ShiftRight(interfaceName);
 
-                for (var i = 0; i < packets.Length; i++) WritePacket(interfaceName, packets[i]);
+                for (var i = 0; i < packets.Length; i++) {
+                    WritePacket(interfaceName, packets[i]);
+                }
             } else {
                 _writeStream.ShiftRight(false);
             }

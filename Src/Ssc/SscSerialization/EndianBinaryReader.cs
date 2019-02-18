@@ -122,9 +122,13 @@ namespace Ssc.SscSerialization {
                 var keyTypeCode = (TypeCode) _readStream.ShiftRight<byte>();
                 var valueTypeCode = (TypeCode) _readStream.ShiftRight<byte>();
 
-                var dicts = DictionaryExtension.Make(keyTypeCode.GetBaseType(), valueTypeCode.GetBaseType());
+                var dicts = DictionaryExtension.MakeDictionary(
+                    keyTypeCode.GetBaseType(),
+                    valueTypeCode.GetBaseType());
 
-                for (var i = 0; i < length; i++) dicts.Add(Read(), Read());
+                for (var i = 0; i < length; i++) {
+                    dicts.Add(Read(), Read());
+                }
 
                 return dicts;
             }
@@ -149,11 +153,13 @@ namespace Ssc.SscSerialization {
                 var keyTypeCode = (TypeCode) _readStream.ShiftRight<byte>();
                 var valueInterfaceName = _readStream.ShiftRight<string>();
 
-                var dicts = DictionaryExtension.Make(
+                var dicts = DictionaryExtension.MakeDictionary(
                     keyTypeCode.GetBaseType(),
                     PacketManager.GetPacketType(valueInterfaceName));
 
-                for (var i = 0; i < length; i++) dicts.Add(Read(), ReadPacket());
+                for (var i = 0; i < length; i++) {
+                    dicts.Add(Read(), ReadPacket());
+                }
                 return dicts;
             }
 
@@ -176,11 +182,13 @@ namespace Ssc.SscSerialization {
                 var keyInterfaceName = _readStream.ShiftRight<string>();
                 var valueInterfaceName = _readStream.ShiftRight<string>();
 
-                var dicts = DictionaryExtension.Make(
+                var dicts = DictionaryExtension.MakeDictionary(
                     PacketManager.GetPacketType(keyInterfaceName),
                     PacketManager.GetPacketType(valueInterfaceName));
 
-                for (var i = 0; i < length; i++) dicts.Add(ReadPacket(), ReadPacket());
+                for (var i = 0; i < length; i++) {
+                    dicts.Add(ReadPacket(), ReadPacket());
+                }
                 return dicts;
             }
 
@@ -203,11 +211,13 @@ namespace Ssc.SscSerialization {
                 var keyInterfaceName = _readStream.ShiftRight<string>();
                 var valueTypeCode = (TypeCode) _readStream.ShiftRight<byte>();
 
-                var dicts = DictionaryExtension.Make(
+                var dicts = DictionaryExtension.MakeDictionary(
                     PacketManager.GetPacketType(keyInterfaceName),
                     valueTypeCode.GetBaseType());
 
-                for (var i = 0; i < length; i++) dicts.Add(ReadPacket(), Read());
+                for (var i = 0; i < length; i++) {
+                    dicts.Add(ReadPacket(), Read());
+                }
 
                 return dicts;
             }

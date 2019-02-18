@@ -18,12 +18,9 @@ namespace Sss.SssScripts.Lua {
             ClrToScript.RegisterPeerComponentToTable();
             ClrToScript.RegisterRpcComponentToTable();
             
-            ScriptToClr.RegisterRpcServiceToTable();
+            ScriptToClr.RegisterControllerToTable();
             ScriptToClr.RegisterUserData<TypeCode>();
-            ScriptToClr.RegisterBaseType(DataType.Number);
-            ScriptToClr.RegisterBaseType(DataType.Boolean);
-            ScriptToClr.RegisterBaseType(DataType.String);
-            ScriptToClr.RegisterBaseType(DataType.Nil);
+            ScriptToClr.RegisterTableToBaseType();
             ScriptToClr.RegisterPacket();
             ScriptToClr.RegisterTableToArray<IConvertible>();
             ScriptToClr.RegisterTableToArray<ISerializablePacket>();

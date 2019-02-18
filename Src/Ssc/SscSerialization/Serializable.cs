@@ -268,7 +268,7 @@ namespace Ssc.SscSerialization {
                     return;
                 }
 
-                if (typeof(IConvertible).IsAssignableFrom(keyType) && valueType.IsByRef) {
+                if (typeof(IConvertible).IsAssignableFrom(keyType) && valueType.IsInterface) {
                     var dicts = new Dictionary<IConvertible, ISerializablePacket>();
                     var valueName = "";
                     foreach (DictionaryEntry item in dict) {
@@ -281,7 +281,7 @@ namespace Ssc.SscSerialization {
                     return;
                 }
 
-                if (keyType.IsByRef && valueType.IsByRef) {
+                if (keyType.IsInterface && valueType.IsInterface) {
                     var keyName = "";
                     var valueName = "";
                     var dicts = new Dictionary<ISerializablePacket, ISerializablePacket>();
@@ -296,7 +296,7 @@ namespace Ssc.SscSerialization {
                     return;
                 }
 
-                if (keyType.IsByRef && typeof(IConvertible).IsAssignableFrom(valueType)) {
+                if (keyType.IsInterface && typeof(IConvertible).IsAssignableFrom(valueType)) {
                     var dicts = new Dictionary<ISerializablePacket, IConvertible>();
                     var keyName = "";
                     foreach (DictionaryEntry item in dict) {

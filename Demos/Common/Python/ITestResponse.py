@@ -1,7 +1,6 @@
 ﻿
-from Controller import Controller
 
-class ITestController(Controller):
+class ITestResponse:
 	def __init__(self):
 		Controller.__init__(self)
 	
@@ -14,5 +13,9 @@ class ITestController(Controller):
 		pass
 	
 	# User-26D0A8C7-3D9B-4AC9-B6AF-700A61E23BFB
-	def Test3(self,num,str,array,packet,peer,callback):
+	def Test3(self,num,str,array,packets,peer,callback):
+		pass
+
+	# User-4844F488-2169-4AAE-A93B-56E45E10495B
+	def Test3(self,str,dict,peer,callback):
 		pass

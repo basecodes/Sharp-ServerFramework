@@ -1,18 +1,34 @@
-﻿local Classes = require "Classes"
+﻿
 
-local Factory = Classes.class() 
+local Factory = {}
 
-function Factory:init()
-	self.ArrayBase = FieldType.ArrayBase
-	self.ArrayPacket = FieldType.ArrayPacket
-	self.DictKBVB = FieldType.DictKBVB
-	self.DictKBVP = FieldType.DictKBVP
-	self.DictKPVP = FieldType.DictKPVP
-	self.DictKPVB = FieldType.DictKPVB
+Factory.DictKBVB = FieldType.DictKBVB
+Factory.DictKBVP = FieldType.DictKBVP
+Factory.DictKPVP = FieldType.DictKPVP
+Factory.DictKPVB = FieldType.DictKPVB
+
+function Factory:CreateArray(baseType)
+	return {Type = FieldType.ArrayBase,ElementTypeCode = baseType,Value = nil}
 end
 
-function Factory:Create(type)
-	return {Type = type}
+function Factory:CreateArrayPacket()
+	return {Type = FieldType.ArrayPacket,Value = nil}
 end
+
+function Factory:CreateDictionary(type,keyType,valueType)
+	return {Type = type,KeyType = keyType,ValueType = valueType,Value = nil}
+end
+
+function Factory:CreateBase(baseType)
+	return {Type = FieldType.BaseType,TypeCode = baseType,Value = nil}
+end
+
+function Factory:GetType(baseType)
+	if baseType == nil then
+		return nil
+	end
+	return LuaUtils.GetType(baseType)
+end
+
 
 return Factory

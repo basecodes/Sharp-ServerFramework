@@ -19,8 +19,12 @@ namespace Sss.SssScripts.Lua {
 
             var objects = new object[args.Length];
             for (var i = 0; i < args.Length; i++) {
-                if (args[i] is IConvertible) {
-                    objects[i] = args[i];
+                if (args[i] is IConvertible value) {
+                    var table = DynValue.NewTable(script).Table;
+                    table["Type"] = FieldType.BaseType;
+                    table["TypeCode"] = value.GetTypeCode();
+                    table["Value"] = value;
+                    objects[i] = table;
                     continue;
                 }
 
@@ -50,7 +54,10 @@ namespace Sss.SssScripts.Lua {
                 return null;
             }
 
-            return luaPacket.Instance;
+            var table = DynValue.NewTable(script).Table;
+            table["Type"] = FieldType.PacketType;
+            table["Value"] = luaPacket.Instance;
+            return table;
         }
 
         private static object ParseArray(Array array,Script script) {
@@ -59,18 +66,21 @@ namespace Sss.SssScripts.Lua {
             }
 
             var table = DynValue.NewTable(script).Table;
+            var values = DynValue.NewTable(script).Table;
             var type = FieldType.ArrayBase;
             for (var i = 0; i < array.Length; i++) {
                 var value = array.GetValue(i);
                 if (value is LuaPacket packet) {
-                    table.Append(DynValue.NewTable(packet.Instance));
+                    values.Append(DynValue.NewTable(packet.Instance));
                     type = FieldType.ArrayPacket;
                 } else {
-                    table.Append(DynValue.FromObject(script,value));
+                    values.Append(DynValue.FromObject(script,value));
                 }
             }
 
             table["Type"] = type;
+            table["Value"] = values;
+            table["ElementTypeCode"] = Type.GetTypeCode(array.GetType().GetElementType());
             return table;
         }
 
@@ -80,6 +90,7 @@ namespace Sss.SssScripts.Lua {
             }
 
             var table = DynValue.NewTable(script).Table;
+            var values = DynValue.NewTable(script).Table;
             var offset = FieldType.DictKBVB;
 
             foreach (DictionaryEntry item in dicts) {
@@ -94,10 +105,14 @@ namespace Sss.SssScripts.Lua {
                     value = packetValue.Instance;
                     offset = FieldType.DictKBVB + 1;
                 }
-                table[key] = value;
+                values[key] = value;
             }
 
+            var types = dicts.GetType().GenericTypeArguments;
+            table["KeyType"] = types[0];
+            table["ValueType"] = types[1];
             table["Type"] = offset;
+            table["Value"] = values;
             return table;
         }
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MoonSharp.Interpreter;
 using Ssc.Ssc;
+using Ssc.SscExtension;
 using Ssc.SscFactory;
 using Ssc.SscSerialization;
 using Ssm.SsmComponent;
@@ -32,6 +33,11 @@ namespace Sss.SssScripts.Lua {
                     switch (type) {
                         case FieldType.NullType:
                             return null;
+                        case FieldType.BaseType: {
+                                var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
+                                    DataType.Table, typeof(IConvertible));
+                                return conversion?.Invoke(v);
+                            }
                         case FieldType.PacketType: {
                                 var conversion = Script.GlobalOptions.CustomConverters.GetScriptToClrCustomConversion(
                                     DataType.Table, typeof(ISerializablePacket));
@@ -111,12 +117,6 @@ namespace Sss.SssScripts.Lua {
             );
         }
 
-        private static IDictionary MakeDictionary(Type keyType, Type valueType) {
-            var dictType = typeof(Dictionary<,>);
-            var makeme = dictType.MakeGenericType(keyType, valueType);
-            return ObjectFactory.GetActivator<IDictionary>(makeme.GetConstructors().First())();
-        }
-
         public static void RegisterTableToDictionary<K, V>() {
             if (typeof(K) != typeof(IConvertible) && typeof(K) != typeof(ISerializablePacket)){
                 throw new NotSupportedException($"{typeof(K).Name}类型必须是({nameof(IConvertible)}或{nameof(ISerializablePacket)})");
@@ -129,25 +129,28 @@ namespace Sss.SssScripts.Lua {
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Table, typeof(Dictionary<K, V>),
                 v => {
-                    var table = v.Table;
-                    var values = MakeDictionary(typeof(K), typeof(V));
+                    var table = v.Table.Get("Value").Table;
+                    var keyType = v.Table.Get("KeyType").ToObject<Type>();
+                    var valueType = v.Table.Get("ValueType").ToObject<Type>();
+
+                    var values = DictionaryExtension.MakeDictionary(keyType, valueType);
 
                     foreach (var item in table.Pairs) {
                         object key = null;
-                        if (typeof(K) == typeof(IConvertible)) {
-                            key = item.Key.ToObject<IConvertible>();
+                        if (typeof(IConvertible).IsAssignableFrom(keyType)) {
+                            key = item.Key.ToObject(keyType);
                         }
 
-                        if (typeof(K) == typeof(ISerializablePacket)) {
+                        if (typeof(ISerializablePacket).IsAssignableFrom(keyType)) {
                             key = item.Key.Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value as ISerializablePacket;
                         }
 
                         object value = null;
-                        if (typeof(V) == typeof(IConvertible)) {
-                            value = item.Value.ToObject<IConvertible>();
+                        if (typeof(IConvertible).IsAssignableFrom(valueType)) {
+                            value = item.Value.ToObject(valueType);
                         }
 
-                        if (typeof(V) == typeof(ISerializablePacket)) {
+                        if (typeof(ISerializablePacket).IsAssignableFrom(valueType)) {
                             value = item.Value.Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value as ISerializablePacket;
                         }
 
@@ -171,26 +174,23 @@ namespace Sss.SssScripts.Lua {
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Table, typeof(T[]),
                 v => {
-                    var table = v.Table;
-
-                    if (typeof(T) == typeof(IConvertible)) {
-                        var values = new IConvertible[table.Length];
+                    var table = v.Table.Get("Value").Table;
+                    var subType = v.Table.Get("ElementTypeCode");
+                    var typeCode = subType.ToObject<TypeCode>();
+                    if (typeCode != TypeCode.Object) {
+                        var values = typeCode.GetBaseType().MakeArray(table.Length);
                         for (var i = 0; i < table.Length; i++) {
-                            values[i] = table.Get(i + 1).ToObject<IConvertible>();
+                            values.SetValue(GetValue(table.Get(i + 1), typeCode),i);
+                        }
+                        return values;
+                    } else {
+                        var values = typeof(ISerializablePacket).MakeArray(table.Length);
+                        for (var i = 0; i < table.Length; i++) {
+                            var luaPacket = table.Get(i + 1).Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value;
+                            values.SetValue(luaPacket, i);
                         }
                         return values;
                     }
-
-                    if (typeof(T) == typeof(ISerializablePacket)) {
-                        var values = new ISerializablePacket[table.Length];
-                        for (var i = 0; i < table.Length; i++) {
-                            values[i] = table.Get(i + 1).Table.Get(nameof(ISerializablePacket)).ToObject<ClassWrapper<ILuaPacket>>().Value;
-                        }
-                        return values;
-                    }
-
-
-                    return null;
                 }
             );
         }
@@ -199,37 +199,55 @@ namespace Sss.SssScripts.Lua {
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.Table, typeof(ISerializablePacket),
                 v => {
-                    var table = v.Table;
+                    var table = v.Table.Get("Value").Table;
                     return table.Get(nameof(ISerializablePacket))?.ToObject<ClassWrapper<ILuaPacket>>().Value;
                 }
             );
         }
 
-        public static void RegisterBaseType(DataType dataType) {
+        private static object GetValue(DynValue dynValue,TypeCode? typeCode) {
+            switch (typeCode) {
+                case TypeCode.Boolean:
+                    return dynValue.ToObject<bool>();
+                case TypeCode.Byte:
+                    return dynValue.ToObject<byte>();
+                case TypeCode.Char:
+                    return dynValue.ToObject<char>();
+                case TypeCode.Double:
+                    return dynValue.ToObject<double>();
+                case TypeCode.Int16:
+                    return dynValue.ToObject<short>();
+                case TypeCode.Int32:
+                    return dynValue.ToObject<int>();
+                case TypeCode.Int64:
+                    return dynValue.ToObject<long>();
+                case TypeCode.SByte:
+                    return dynValue.ToObject<sbyte>();
+                case TypeCode.Single:
+                    return dynValue.ToObject<float>();
+                case TypeCode.String:
+                    return dynValue.ToObject<string>();
+                case TypeCode.UInt16:
+                    return dynValue.ToObject<ushort>();
+                case TypeCode.UInt32:
+                    return dynValue.ToObject<uint>();
+                case TypeCode.UInt64:
+                    return dynValue.ToObject<ulong>();
+            }
+            return null;
+        }
+        public static void RegisterTableToBaseType() {
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
-                dataType, typeof(IConvertible),
+                DataType.Table, typeof(IConvertible),
                 v => {
-                    switch (dataType) {
-                        case DataType.Boolean:
-                            return v.Boolean;
-
-                        case DataType.Number:
-                            return v.Number;
-
-                        case DataType.String:
-                            return v.String;
-
-                        case DataType.Nil:
-                            return null;
-
-                        default:
-                            throw new NotSupportedException($"{dataType}");
-                    }
+                    var table = v.Table;
+                    var typeCode = table.Get("TypeCode")?.ToObject<TypeCode>();
+                    return GetValue(table.Get("Value"),typeCode);
                 }
             );
         }
         
-        public static void RegisterRpcServiceToTable() {
+        public static void RegisterControllerToTable() {
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(
                 DataType.UserData, typeof(Table),
                 v => {

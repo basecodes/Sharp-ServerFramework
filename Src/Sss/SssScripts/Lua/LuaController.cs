@@ -50,7 +50,15 @@ namespace Sss.SssScripts.Lua {
                 closure?.Call(rm, sd);
             };
 
-            Ssci.Invoke(methodId, peer, responseCallback, objects);
+            Invoke(methodId, peer, responseCallback, objects);
+        }
+
+        public void Invoke(string methodId, IPeer peer, ResponseCallback responseCallback, params object[] objects) {
+            Ssci.Invoke(methodId, peer, responseCallback, (serializable) => {
+                foreach (var item in objects) {
+                    serializable.SerializableObject(item);
+                }
+            });
         }
     }
 }

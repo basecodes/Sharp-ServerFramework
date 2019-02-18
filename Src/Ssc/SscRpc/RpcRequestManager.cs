@@ -144,19 +144,19 @@ namespace Ssc.SscRpc {
                         return Expression.Call(expression,methodInfo.MakeGenericMethod(keyType,valueType),arg);
                     }
 
-                    if (typeof(IConvertible).IsAssignableFrom(keyType) && valueType.IsByRef) {
+                    if (typeof(IConvertible).IsAssignableFrom(keyType) && valueType.IsInterface) {
                         var methodName = nameof(ISerializable.SerializeDictionaryBP);
                         var methodInfo = methods.First(m => m.IsGenericMethod && m.Name.Equals(methodName, StringComparison.OrdinalIgnoreCase));
                         return Expression.Call(expression,methodInfo.MakeGenericMethod(keyType,valueType),arg);
                     }
 
-                    if (keyType.IsByRef && valueType.IsByRef) {
+                    if (keyType.IsInterface && valueType.IsInterface) {
                         var methodName = nameof(ISerializable.SerializeDictionaryPP);
                         var methodInfo = methods.First(m => m.IsGenericMethod && m.Name.Equals(methodName, StringComparison.OrdinalIgnoreCase));
                         return Expression.Call(expression,methodInfo.MakeGenericMethod(keyType,valueType),arg);
                     }
 
-                    if (keyType.IsByRef && typeof(IConvertible).IsAssignableFrom(valueType)) {
+                    if (keyType.IsInterface && typeof(IConvertible).IsAssignableFrom(valueType)) {
                         var methodName = nameof(ISerializable.SerializeDictionaryPB);
                         var methodInfo = methods.First(m => m.IsGenericMethod && m.Name.Equals(methodName, StringComparison.OrdinalIgnoreCase));
                         return Expression.Call(expression,methodInfo.MakeGenericMethod(keyType,valueType),arg);
