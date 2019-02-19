@@ -43,7 +43,6 @@ class TestController(Controller):
 
 		for item in dict:
 			print(item)
-			print(dict[item])
 
 		self.Invoke("User-C00E44A2-09E0-4C94-81DC-9622AA38EFB4",peer,None,str,dict)
 		return True

@@ -38,6 +38,10 @@ namespace Sss.SssScripts.Python {
 
         private object[] PacketShell(dynamic[] objects) {
             for (var i = 0; i < objects.Length; i++) {
+                if (objects[i] is OldInstance) {
+                    objects[i] = objects[i].ISerializablePacket.Value;
+                }
+
                 if (objects[i] is Array array) {
                     var type = objects[i].GetType().GetElementType();
                     if (!typeof(IConvertible).IsAssignableFrom(type)) {
@@ -52,25 +56,30 @@ namespace Sss.SssScripts.Python {
 
                 if (objects[i] is IDictionary dict) {
                     var arguments = dict.GetType().GetGenericArguments();
+                    if (typeof(OldInstance).IsAssignableFrom(arguments[0])) {
+                        arguments[0] = typeof(IPythonPacket);
+                    }
+
+                    if (typeof(OldInstance).IsAssignableFrom(arguments[1])) {
+                        arguments[1] = typeof(IPythonPacket);
+                    }
+
                     var newDict = DictionaryExtension.MakeDictionary(arguments[0], arguments[1]);
                     foreach (var item in dict.Keys) {
                         var value = dict[item];
-                        object key = null;
-                        if (!typeof(IConvertible).IsAssignableFrom(arguments[0])) {
+                        object key = item;
+                        if (arguments[0] == typeof(IPythonPacket)) {
                             dict.Remove(item);
                             key = (item as dynamic).ISerializablePacket.Value;
                         }
 
-                        if (!typeof(IConvertible).IsAssignableFrom(arguments[1])) {
+                        if (arguments[1] == typeof(IPythonPacket)) {
                             value = (value as dynamic).ISerializablePacket.Value;
                         }
-                        newDict[key] = value;
+                        newDict.Add(key, value);
                     }
+                    objects[i] = newDict;
                     continue;
-                }
-
-                if (!(objects[i] is IConvertible)) {
-                    objects[i] = objects[i].ISerializablePacket.Value;
                 }
             }
             return objects;

@@ -1,4 +1,6 @@
 ﻿using IronPython.Runtime;
+using IronPython.Runtime.Types;
+using Ssc.SscExtension;
 using Ssc.SscLog;
 using Sss.SssSerialization.Python;
 using System;
@@ -73,7 +75,16 @@ namespace Sss.SssScripts.Python {
                 return null;
             }
 
-            var dict = new PythonDictionary();
+            var arguments = dicts.GetType().GetGenericArguments();
+            Type keyType = arguments[0];
+            if (typeof(IPythonPacket).IsAssignableFrom(arguments[0])) {
+                keyType = typeof(OldInstance);
+            }
+            Type valueType = arguments[1];
+            if (typeof(IPythonPacket).IsAssignableFrom(arguments[1])) {
+                valueType = typeof(OldInstance);
+            }
+            var dict = DictionaryExtension.MakeDictionary(keyType, valueType);
             foreach (DictionaryEntry item in dicts) {
                 var key = item.Key;
                 if (item.Key is IPythonPacket packetKey) {
