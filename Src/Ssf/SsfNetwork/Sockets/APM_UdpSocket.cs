@@ -15,7 +15,7 @@ namespace Ssf.SsfNetwork.Sockets {
     public sealed class APM_UdpSocket : SocketCore {
 
         public override SocketStatistics SocketStatistics { get; }
-        public override event Func<SocketService, IReadStream,IWriteStream,bool> HandleAccept;
+        public override event Action<SocketService, IReadStream,IWriteStream> HandleAccept;
         public override event Action<SocketService, IReadStream> HandleConnect;
 
         private static readonly Logger Logger = LogManager.GetLogger<APM_UdpSocket>(LogType.Low);
@@ -595,15 +595,11 @@ namespace Ssf.SsfNetwork.Sockets {
             service.Connection.RemoteAddress = endPoint;
 
             if (_connections.TryAdd(endPoint, service)) {
+
                 using (var writeStream = PoolAllocator<IWriteStream>.GetObject()) {
-                    var disconnect = HandleAccept?.Invoke(service, readStream, writeStream);
+                    HandleAccept?.Invoke(service, readStream, writeStream);
                     var byteSegment = writeStream.ToByteFragment();
                     Acknowledge(service, SendOption.Acknowledge | SendOption.Connect, packetHead, writeStream);
-                    if (disconnect.GetValueOrDefault(true)) {
-                        CreateAck(service);
-                    } else {
-                        Disconnect(service);
-                    }
                     SocketStatistics.LogAcknowledgementSend();
                     SocketStatistics.LogUnreliableReceive();
                     SocketStatistics.LogDataBytesReceived(byteSegment.Count);

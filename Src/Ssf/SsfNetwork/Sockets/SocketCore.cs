@@ -9,7 +9,7 @@ namespace Ssf.SsfNetwork.Sockets {
     public abstract class SocketCore : ISocket {
         private static readonly Logger Logger = LogManager.GetLogger<SocketCore>(LogType.Low);
 
-        public abstract event Func<SocketService, IReadStream,IWriteStream,bool> HandleAccept;
+        public abstract event Action<SocketService, IReadStream,IWriteStream> HandleAccept;
 
         public abstract event Action<SocketService,IReadStream> HandleConnect;
 

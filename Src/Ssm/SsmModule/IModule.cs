@@ -17,7 +17,7 @@ namespace Ssm.SsmModule {
         void InitFinish(IServer server, ICacheManager cacheManager, IControllerComponentManager controllerComponentManager);
         void Finish(IServer server, ICacheManager cacheManager, IControllerComponentManager controllerComponentManager);
 
-        bool Accepted(IUser peer, IReadStream readStream, IWriteStream writeStream);
+        void Accepted(IUser peer, IReadStream readStream);
         void Connected(IUser peer,IReadStream readStream);
         void Disconnected(IUser peer);
     }

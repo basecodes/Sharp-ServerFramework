@@ -22,8 +22,8 @@ class Module:
 	def Dispose(self,cacheManager,controllerComponentManager):
 		pass
 
-	def Accepted(self,peer,readStream,writeStream):
-		return True
+	def Accepted(self,peer,readStream):
+		pass
 
 	def Connected(self,peer,readStream):
 		pass

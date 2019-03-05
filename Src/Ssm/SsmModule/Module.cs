@@ -32,8 +32,7 @@ namespace Ssm.SsmModule {
             RpcPacketTypes = new List<string>();
         }
 
-        public virtual bool Accepted(IUser peer, IReadStream readStream, IWriteStream writeStream) {
-            return true;
+        public virtual void Accepted(IUser peer, IReadStream readStream) {
         }
 
         public virtual void Connected(IUser peer, IReadStream readStream) {

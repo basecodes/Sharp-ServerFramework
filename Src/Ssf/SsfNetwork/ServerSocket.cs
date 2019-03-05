@@ -20,7 +20,7 @@ namespace Ssf.SsfNetwork {
         public ISocket Socket { get; }
 
         public event Action<IUser, IReadStream> Connected;
-        public event Func<IUser, IReadStream, IWriteStream, bool> Accepted;
+        public event Action<IUser, IReadStream, IWriteStream> Accepted;
         public event Action<IUser> Disconnected;
         private MessageQueue _messageQueue;
         private string _serviceId;
@@ -55,14 +55,19 @@ namespace Ssf.SsfNetwork {
             Disconnected = null;
         }
 
-        private bool Accept(SocketService socketService, IReadStream readStream,IWriteStream writeStream) {
+        private void Accept(SocketService socketService, IReadStream readStream, IWriteStream writeStream) {
             var peer = AddListener(socketService);
-            return Accepted == null ? true:Accepted.Invoke(peer, readStream, writeStream);
+            Accepted.Invoke(peer, readStream,writeStream);
         }
         
         private void PeerConnected(SocketService socketService, IReadStream readStream) {
             var peer = AddListener(socketService);
-            Connected?.Invoke(peer, readStream);
+
+            var tmp = readStream.Clone();
+            _messageQueue.Enqueue(() => {
+                Connected?.Invoke(peer, readStream);
+                tmp.Dispose();
+            });
         }
 
         public IUser AddListener(SocketService socketService) {
@@ -133,6 +138,10 @@ namespace Ssf.SsfNetwork {
 
             _messageQueue.Start();
             Socket.Connect(socketConfig, writeStream);
+        }
+
+        public void AddEvent(Action evt) {
+            _messageQueue.Enqueue(evt);
         }
     }
 }

@@ -74,8 +74,8 @@ namespace Sss.SssModule {
             _instance.Finish(server, cacheManager, controllerComponentManager);
         }
 
-        public virtual bool Accepted(IUser peer, IReadStream readStream, IWriteStream writeStream) {
-            return _instance.Accepted(peer, readStream, writeStream);
+        public virtual void Accepted(IUser peer, IReadStream readStream) {
+            _instance.Accepted(peer, readStream);
         }
 
         public virtual void Connected(IUser peer, IReadStream readStream) {

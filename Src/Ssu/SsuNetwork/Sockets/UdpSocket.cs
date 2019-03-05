@@ -426,6 +426,7 @@ namespace Ssu.SsuNetwork.Sockets {
                         HandleReconnect?.Invoke(service, false);
                         OnDisconnect(service);
                     });
+
                 HandleConnect?.Invoke(service, readStream);
 
                 Logger.Info($"{endPoint}连接成功！");

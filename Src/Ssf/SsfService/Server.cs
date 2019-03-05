@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ssc.Ssc;
+using Ssc.SscAlgorithm.SscQueue;
 using Ssc.SscAttribute;
 using Ssc.SscConfiguration;
 using Ssc.SscExtension;
@@ -37,7 +38,7 @@ namespace Ssf.SsfService {
         private readonly Dictionary<string, Action<IUser, object>> _events;
 
         private Keys _keys;
-        private Func<IUser,IReadStream,IWriteStream,bool> _acceptAction = (p,rs,ws) => true;
+        private Action<IUser,IReadStream> _acceptAction = (p,rs) => { };
         private Action<IUser,IReadStream> _connectedAction = (p,rs) => { };
         private Action<IUser> _disconnectedAction = (p) => { };
 
@@ -202,11 +203,8 @@ namespace Ssf.SsfService {
             }
         }
 
-        private bool AcceptConnected(IUser peer, IReadStream readStream, IWriteStream writeStream) {
-            if (writeStream == null) {
-                Logger.Warn($"{nameof(writeStream)}为空！");
-                return true;
-            }
+        private void AcceptConnected(IUser peer, IReadStream readStream,
+            IWriteStream writeStream) {
 
             var publicKey = readStream.ShiftRight<string>();
             var key = ID +"_" + SystemUtil.CreateRandomString(Ssfi.CryptoConfig.CryptonKeyLength);
@@ -224,13 +222,15 @@ namespace Ssf.SsfService {
             writeStream.ShiftRight(encryptKey);
             writeStream.ShiftRight(string.Join(";", RpcMethodIds));
 
-            var success = true;
-            try {
-                success = _acceptAction == null? true:_acceptAction.Invoke(peer,readStream,writeStream);
-            } catch (Exception e) {
-                Logger.Error(e);
-            }
-            return success;
+            var tmp = readStream.Clone();
+            _serverSocket.AddEvent(() => {
+                try {
+                    _acceptAction.Invoke(peer, readStream);
+                } catch (Exception e) {
+                    Logger.Error(e);
+                }
+                tmp.Dispose();
+            });
         }
 
         private void PeerDisconnected(IUser peer) {

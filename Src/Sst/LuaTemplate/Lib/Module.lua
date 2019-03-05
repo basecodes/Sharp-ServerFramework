@@ -35,9 +35,8 @@ function Module:Finish(server,cacheManager,controllerComponentManager)
 end
 
 -- abstract
-function Module:Accepted(peer,readStream,writeStream)
+function Module:Accepted(peer,readStream)
 	-- Body
-	return true
 end
 
 -- abstract

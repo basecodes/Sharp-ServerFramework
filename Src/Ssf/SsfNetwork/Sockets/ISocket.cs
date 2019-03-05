@@ -7,7 +7,7 @@ namespace Ssf.SsfNetwork.Sockets {
     public interface ISocket : IDisposable {
         SocketStatistics SocketStatistics { get; }
 
-        event Func<SocketService, IReadStream,IWriteStream,bool> HandleAccept;
+        event Action<SocketService, IReadStream, IWriteStream> HandleAccept;
 
         event Action<SocketService, IReadStream> HandleConnect;
 

@@ -49,8 +49,8 @@ namespace Sss.SssModule {
             LuaHelper.RegisterType<IWriteStream>();
         }
 
-        public virtual bool Accepted(IUser peer, IReadStream readStream, IWriteStream writeStream) {
-            return _luaHelper.Call(_table, nameof(Accepted), _table, peer, readStream, writeStream).ToObject<bool>();
+        public virtual void Accepted(IUser peer, IReadStream readStream) {
+            _luaHelper.Call(_table, nameof(Accepted), _table, peer);
         }
 
         public virtual void Connected(IUser peer, IReadStream readStream) {
