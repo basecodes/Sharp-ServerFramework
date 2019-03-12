@@ -226,9 +226,19 @@ namespace Ssu.SsuNetwork.Sockets {
         private Socket CreateSocket(AddressFamily addressFamily,EndPoint endPoint) {
             var socket = new Socket(addressFamily, SocketType.Dgram, ProtocolType.Udp);
 
-            var ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            socket.Bind(endPoint == null?ipEndPoint:endPoint);
-
+            try {
+                if (endPoint != null) {
+                    socket.Bind(endPoint);
+                } else {
+                    if (addressFamily == AddressFamily.InterNetwork) {
+                        socket.Bind(new IPEndPoint(IPAddress.Any, 0));
+                    } else {
+                        socket.Bind(new IPEndPoint(IPAddress.IPv6Any,0));
+                    }
+                }
+            } catch (Exception e) {
+                Logger.Debug(e);
+            }
             return socket;
         }
 
