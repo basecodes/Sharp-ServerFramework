@@ -55,7 +55,8 @@ namespace Sss.SssScripts.Python {
         }
 
         public static string GetPythonTypeName(dynamic obj) {
-            return DynamicHelpers.GetPythonType(obj).__name__;
+            var type = DynamicHelpers.GetPythonType(obj);
+            return type.__name__;
         }
 
         public static string GetPythonTypeName(PythonType pythonType) {

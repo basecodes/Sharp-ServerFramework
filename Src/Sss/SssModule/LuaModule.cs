@@ -32,7 +32,18 @@ namespace Sss.SssModule {
         private IServer _server;
         public string ServiceId => LuaHelper.Get(_table, nameof(ServiceId)).ToObject<string>();
 
-        public string ModuleName => LuaHelper.Get(_table,nameof(ModuleName)).ToObject<string>();
+        private string _moduleName;
+        public string ModuleName {
+            get => _moduleName;
+            set {
+                _moduleName = value;
+                if (string.IsNullOrEmpty(_moduleName)) {
+                    _moduleName = LuaHelper.Get(_table, nameof(ModuleName)).ToObject<string>();
+                }
+            }
+        }
+
+        public object Self => _table;
 
         public LuaModule(Table table, LuaHelper luaHelper) {
             

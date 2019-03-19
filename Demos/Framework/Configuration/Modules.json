@@ -1,7 +1,9 @@
 ﻿{
+  "ProjectName": "CSharpModule",
   "Paths": [
     {
-      "Language":"CSharp",
+      "Module": "",
+      "Language": "CSharp",
       "File": "",
       "Entry": "",
       "Search": ""

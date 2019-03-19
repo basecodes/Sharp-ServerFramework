@@ -10,7 +10,8 @@ namespace Ssm.SsmModule {
         string ServiceId { get; }
         List<string> RpcMethodIds { get; }
         List<string> RpcPacketTypes { get; }
-        string ModuleName { get; }
+        string ModuleName { get; set; }
+        object Self { get;}
 
         void Dispose(ICacheManager cacheManager, IControllerComponentManager controllerComponentManager);
         void Initialize(IServer server, ICacheManager cacheManager, IControllerComponentManager controllerComponentManager);

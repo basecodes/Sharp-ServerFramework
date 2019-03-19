@@ -10,6 +10,7 @@ namespace Ssc.SscConfiguration {
     }
 
     public class SinglePath {
+        public string ModuleName { get; set; }
         public Language Language { get; set; }
         public string File { get; set; }
         public string Entry { get; set; }

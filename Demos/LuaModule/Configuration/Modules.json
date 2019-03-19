@@ -2,6 +2,7 @@
   "ProjectName": "LuaModule",
   "Paths": [
     {
+      "Module": "",
       "Language": "Lua",
       "File": "Start.lua",
       "Entry": "",

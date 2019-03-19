@@ -2,6 +2,7 @@
   "ProjectName": "PythonModule",
   "Paths": [
     {
+      "Module": "",
       "Language": "Python",
       "File": "Start.py",
       "Entry": "Startup",

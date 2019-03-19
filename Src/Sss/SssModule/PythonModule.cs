@@ -27,7 +27,19 @@ namespace Sss.SssModule {
         public List<string> RpcPacketTypes {get;}
 
         public string ServiceId => _instance.ServiceId;
-        public string ModuleName => PythonHelper.GetPythonTypeName(this);
+
+        private string _moduleName;
+        public string ModuleName {
+            get => _moduleName;
+            set {
+                _moduleName = value;
+                if (string.IsNullOrEmpty(_moduleName)) {
+                    _moduleName = _instance.__class__.__name__;
+                }
+            }
+        }
+
+        public object Self => _instance;
 
         private IServer _server;
         private PythonHelper _pythonHelper;

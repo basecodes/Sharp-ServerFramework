@@ -23,7 +23,7 @@ namespace Ssf.SsfManager {
             LuaHelper.RegisterType<ModuleManager>();
         }
 
-        public void AddModuleFromDllFile(string fileName, string entry = "Startup") {
+        public void AddModuleFromDllFile(string fileName, string moduleName = "",string entry = "Startup") {
             if (!File.Exists(fileName)) {
                 throw new Exception($"{fileName}文件不存在！");
             }
@@ -51,10 +51,11 @@ namespace Ssf.SsfManager {
                 throw new Exception($"{entry}.Main()返回空!");
             }
 
+            module.ModuleName = moduleName;
             AddModule(module);
         }
 
-        public void AddModuleFromPythonFile(string fileName, string entry = "Startup", params string[] paths) {
+        public void AddModuleFromPythonFile(string fileName, string moduleName = "", string entry = "Startup", params string[] paths) {
             var pythonHelper = new PythonHelper();
 
             pythonHelper.SetSearchPaths(paths);
@@ -65,12 +66,13 @@ namespace Ssf.SsfManager {
                 throw new Exception($"{fileName}库返回值异常，返回值为null!");
             }
 
-            var type = PythonHelper.GetPythonTypeName(module);
+            var pythonModule = pythonHelper.GetMember(module, nameof(IModule));
+            pythonModule.ModuleName = moduleName;
 
-            AddModule(type, pythonHelper.GetMember(module,nameof(IModule)));
+            AddModule(pythonModule);
         }
 
-        public void AddModuleFromLuaFile(string fileName, string entry, string libPath = "./?;./?.lua;./Lua/?;./Lua/?.lua") {
+        public void AddModuleFromLuaFile(string fileName, string entry, string moduleName = "", string libPath = "./?;./?.lua;./Lua/?;./Lua/?.lua") {
             var luaHelper = new LuaHelper();
 
             LuaGlobals.Init();
@@ -98,6 +100,8 @@ namespace Ssf.SsfManager {
                 throw new Exception($"转换{nameof(IModule)}失败！");
             }
 
+            luaModule.ModuleName = moduleName;
+
             AddModule(luaModule);
         }
 
@@ -112,7 +116,7 @@ namespace Ssf.SsfManager {
         }
 
         public void AddModule(IModule module) {
-            AddModule(module.GetType().Name, module);
+            AddModule(module.ModuleName, module);
         }
 
         public T AddModule<T>(params object[] args) where T : class,IModule {

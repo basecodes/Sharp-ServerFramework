@@ -57,15 +57,15 @@ namespace Ssf {
             foreach (var item in _rojectConfig.Paths) {
 
                 if (item.Language == Language.CSharp) {
-                    moduleManager.AddModuleFromDllFile(item.File, item.Entry);
+                    moduleManager.AddModuleFromDllFile(item.File,item.ModuleName, item.Entry);
                 }
 
                 if (item.Language == Language.Lua) {
-                    moduleManager.AddModuleFromLuaFile(item.File, item.Entry, item.Search);
+                    moduleManager.AddModuleFromLuaFile(item.File, item.Entry,item.ModuleName, item.Search);
                 }
 
                 if (item.Language == Language.Python) {
-                    moduleManager.AddModuleFromPythonFile(item.File, item.Entry, item.Search.Split(';'));
+                    moduleManager.AddModuleFromPythonFile(item.File, item.ModuleName,item.Entry, item.Search.Split(';'));
                 }
             }
         }
