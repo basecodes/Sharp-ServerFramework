@@ -1,5 +1,6 @@
 # Sharp-ServerFramework
 一个基于 .net core 2.2的RPC服务器框架，同时支持使用Lua和Python。
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 ## REPL
 ![GitHub Logo](/Images/REPL.png)
